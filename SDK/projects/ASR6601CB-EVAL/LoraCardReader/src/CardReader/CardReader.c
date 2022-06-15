@@ -1,8 +1,10 @@
+//
 #include "CardReader.h"
 #include "i2c.h"
 
-Uid uid;
 
+static uint8_t MIFARE_TwoStepHelper(uint8_t command, uint8_t blockAddr, long data);
+Uid uid;
 // Firmware data for self-test
 // Reference values based on firmware version
 // Hint: if needed, you can remove unused self-test data to save flash memory
@@ -215,6 +217,7 @@ void PCD_Init() {
 	// Set the chipSelectPin as digital output, do not select the slave yet
 
 	// Set the resetPowerDownPin as digital output, do not reset or power down.
+#if 0 // TODO: Реализовать в платформе
 	pinMode(_resetPowerDownPin, OUTPUT);
 
 
@@ -226,6 +229,7 @@ void PCD_Init() {
 	else { // Perform a soft reset
 		PCD_Reset();
 	}
+#endif
 
 	// When communicating with a PICC we need a timeout if something goes wrong.
 	// f_timer = 13.56 MHz / (2*TPreScaler+1) where TPreScaler = [TPrescaler_Hi:TPrescaler_Lo].
@@ -424,7 +428,7 @@ uint8_t PCD_CommunicateWithPICC(	uint8_t command,		///< The command to execute. 
 	PCD_WriteRegister(CommandReg, PCD_Idle);			// Stop any active command.
 	PCD_WriteRegister(ComIrqReg, 0x7F);					// Clear all seven interrupt request bits
 	PCD_SetRegisterBitMask(FIFOLevelReg, 0x80);			// FlushBuffer = 1, FIFO initialization
-	PCD_WriteRegister(FIFODataReg, sendLen, sendData);	// Write sendData to the FIFO
+	PCD_WriteRegisterEx(FIFODataReg, sendLen, sendData);	// Write sendData to the FIFO
 	PCD_WriteRegister(BitFramingReg, bitFraming);		// Bit adjustments
 	PCD_WriteRegister(CommandReg, command);				// Execute the command
 	if (command == PCD_Transceive) {
@@ -461,7 +465,7 @@ uint8_t PCD_CommunicateWithPICC(	uint8_t command,		///< The command to execute. 
 			return STATUS_NO_ROOM;
 		}
 		*backLen = n;											// Number of uint8_ts returned
-		PCD_ReadRegister(FIFODataReg, n, backData, rxAlign);	// Get received data from FIFO
+		PCD_ReadRegisterEx(FIFODataReg, n, backData, rxAlign);	// Get received data from FIFO
 		_validBits = PCD_ReadRegister(ControlReg) & 0x07;		// RxLastBits[2:0] indicates the number of valid bits in the last received uint8_t. If this value is 000b, the whole uint8_t is valid.
 		if (validBits) {
 			*validBits = _validBits;
@@ -539,7 +543,7 @@ uint8_t PICC_REQA_or_WUPA(	uint8_t command, 		///< The command to send - PICC_CM
 	}
 	PCD_ClearRegisterBitMask(CollReg, 0x80);		// ValuesAfterColl=1 => Bits received after collision are cleared.
 	validBits = 7;									// For REQA and WUPA we need the short frame format - transmit only 7 bits of the last (and only) uint8_t. TxLastBits = BitFramingReg[2..0]
-	status = PCD_TransceiveData(&command, 1, bufferATQA, bufferSize, &validBits);
+	status = PCD_TransceiveData(&command, 1, bufferATQA, bufferSize, &validBits, 0, false);
 	if (status != STATUS_OK) {
 		return status;
 	}
@@ -660,7 +664,7 @@ uint8_t PICC_Select(	Uid *uid,			///< Pointer to Uid struct. Normally output, bu
 				uint8_tsToCopy = maxuint8_ts;
 			}
 			for (count = 0; count < uint8_tsToCopy; count++) {
-				buffer[index++] = uid->uiduint8_t[uidIndex + count];
+				buffer[index++] = uid->uidByte[uidIndex + count];
 			}
 		}
 		// Now that the data has been copied we need to include the 8 bits in CT in currentLevelKnownBits
@@ -705,7 +709,7 @@ uint8_t PICC_Select(	Uid *uid,			///< Pointer to Uid struct. Normally output, bu
 			PCD_WriteRegister(BitFramingReg, (rxAlign << 4) + txLastBits);	// RxAlign = BitFramingReg[6..4]. TxLastBits = BitFramingReg[2..0]
 
 			// Transmit the buffer and receive the response.
-			result = PCD_TransceiveData(buffer, bufferUsed, responseBuffer, &responseLength, &txLastBits, rxAlign);
+			result = PCD_TransceiveData(buffer, bufferUsed, responseBuffer, &responseLength, &txLastBits, rxAlign, false);
 			if (result == STATUS_COLLISION) { // More than one PICC in the field => collision.
 				result = PCD_ReadRegister(CollReg); // CollReg[7..0] bits are: ValuesAfterColl reserved CollPosNotValid CollPos[4:0]
 				if (result & 0x20) { // CollPosNotValid
@@ -746,7 +750,7 @@ uint8_t PICC_Select(	Uid *uid,			///< Pointer to Uid struct. Normally output, bu
 		index			= (buffer[2] == PICC_CMD_CT) ? 3 : 2; // source index in buffer[]
 		uint8_tsToCopy		= (buffer[2] == PICC_CMD_CT) ? 3 : 4;
 		for (count = 0; count < uint8_tsToCopy; count++) {
-			uid->uiduint8_t[uidIndex + count] = buffer[index++];
+			uid->uidByte[uidIndex + count] = buffer[index++];
 		}
 
 		// Check response SAK (Select Acknowledge)
@@ -799,7 +803,7 @@ uint8_t PICC_HaltA() {
 	//		If the PICC responds with any modulation during a period of 1 ms after the end of the frame containing the
 	//		HLTA command, this response shall be interpreted as 'not acknowledge'.
 	// We interpret that this way: Only STATUS_TIMEOUT is an success.
-	result = PCD_TransceiveData(buffer, sizeof(buffer), NULL, 0);
+	result = PCD_TransceiveData(buffer, sizeof(buffer), NULL, 0, NULL, 0 ,false);
 	if (result == STATUS_TIMEOUT) {
 		return STATUS_OK;
 	}
@@ -838,14 +842,14 @@ uint8_t PCD_Authenticate(uint8_t command,		///< PICC_CMD_MF_AUTH_KEY_A or PICC_C
 	sendData[0] = command;
 	sendData[1] = blockAddr;
 	for (uint8_t i = 0; i < MF_KEY_SIZE; i++) {	// 6 key uint8_ts
-		sendData[2+i] = key->keyuint8_t[i];
+		sendData[2+i] = key->keyByte[i];
 	}
 	for (uint8_t i = 0; i < 4; i++) {				// The first 4 uint8_ts of the UID
-		sendData[8+i] = uid->uiduint8_t[i];
+		sendData[8+i] = uid->uidByte[i];
 	}
 
 	// Start the authentication.
-	return PCD_CommunicateWithPICC(PCD_MFAuthent, waitIRq, &sendData[0], sizeof(sendData));
+	return PCD_CommunicateWithPICC(PCD_MFAuthent, waitIRq, &sendData[0], sizeof(sendData),  NULL, NULL, NULL, 0, false);
 } // End PCD_Authenticate()
 
 /**
@@ -924,13 +928,13 @@ uint8_t MIFARE_Write(	uint8_t blockAddr, ///< MIFARE Classic: The block (0-0xff)
 	uint8_t cmdBuffer[2];
 	cmdBuffer[0] = PICC_CMD_MF_WRITE;
 	cmdBuffer[1] = blockAddr;
-	result = PCD_MIFARE_Transceive(cmdBuffer, 2); // Adds CRC_A and checks that the response is MF_ACK.
+	result = PCD_MIFARE_Transceive(cmdBuffer, 2, false); // Adds CRC_A and checks that the response is MF_ACK.
 	if (result != STATUS_OK) {
 		return result;
 	}
 
 	// Step 2: Transfer the data
-	result = PCD_MIFARE_Transceive(buffer, bufferSize); // Adds CRC_A and checks that the response is MF_ACK.
+	result = PCD_MIFARE_Transceive(buffer, bufferSize, false); // Adds CRC_A and checks that the response is MF_ACK.
 	if (result != STATUS_OK) {
 		return result;
 	}
@@ -961,7 +965,7 @@ uint8_t MIFARE_Ultralight_Write(	uint8_t page, 		///< The page (2-15) to write t
 	memcpy(&cmdBuffer[2], buffer, 4);
 
 	// Perform the write
-	result = PCD_MIFARE_Transceive(cmdBuffer, 6); // Adds CRC_A and checks that the response is MF_ACK.
+	result = PCD_MIFARE_Transceive(cmdBuffer, 6, false); // Adds CRC_A and checks that the response is MF_ACK.
 	if (result != STATUS_OK) {
 		return result;
 	}
@@ -1016,7 +1020,7 @@ uint8_t MIFARE_Restore(	uint8_t blockAddr ///< The block (0-0xff) number.
  *
  * @return STATUS_OK on success, STATUS_??? otherwise.
  */
-uint8_t MIFARE_TwoStepHelper(	uint8_t command,	///< The command to use
+static uint8_t MIFARE_TwoStepHelper(	uint8_t command,	///< The command to use
 									uint8_t blockAddr,	///< The block (0-0xff) number.
 									long data		///< The data to transfer in step 2
 									) {
@@ -1026,7 +1030,7 @@ uint8_t MIFARE_TwoStepHelper(	uint8_t command,	///< The command to use
 	// Step 1: Tell the PICC the command and block address
 	cmdBuffer[0] = command;
 	cmdBuffer[1] = blockAddr;
-	result = PCD_MIFARE_Transceive(	cmdBuffer, 2); // Adds CRC_A and checks that the response is MF_ACK.
+	result = PCD_MIFARE_Transceive(	cmdBuffer, 2, false); // Adds CRC_A and checks that the response is MF_ACK.
 	if (result != STATUS_OK) {
 		return result;
 	}
@@ -1055,7 +1059,7 @@ uint8_t MIFARE_Transfer(	uint8_t blockAddr ///< The block (0-0xff) number.
 	// Tell the PICC we want to transfer the result into block blockAddr.
 	cmdBuffer[0] = PICC_CMD_MF_TRANSFER;
 	cmdBuffer[1] = blockAddr;
-	result = PCD_MIFARE_Transceive(	cmdBuffer, 2); // Adds CRC_A and checks that the response is MF_ACK.
+	result = PCD_MIFARE_Transceive(	cmdBuffer, 2, false); // Adds CRC_A and checks that the response is MF_ACK.
 	if (result != STATUS_OK) {
 		return result;
 	}
@@ -1082,7 +1086,7 @@ uint8_t MIFARE_GetValue(uint8_t blockAddr, long *value) {
 	status = MIFARE_Read(blockAddr, buffer, &size);
 	if (status == STATUS_OK) {
 		// Extract the value
-		*value = (long(buffer[3])<<24) | (long(buffer[2])<<16) | (long(buffer[1])<<8) | long(buffer[0]);
+		*value = (long)(buffer[3]<<24) | (long)(buffer[2]<<16) | (long)(buffer[1]<<8) | (long)(buffer[0]);
 	}
 	return status;
 } // End MIFARE_GetValue()
@@ -1153,7 +1157,7 @@ uint8_t PCD_MIFARE_Transceive(	uint8_t *sendData,		///< Pointer to the data to t
 	uint8_t waitIRq = 0x30;		// RxIRq and IdleIRq
 	uint8_t cmdBufferSize = sizeof(cmdBuffer);
 	uint8_t validBits = 0;
-	result = PCD_CommunicateWithPICC(PCD_Transceive, waitIRq, cmdBuffer, sendLen, cmdBuffer, &cmdBufferSize, &validBits);
+	result = PCD_CommunicateWithPICC(PCD_Transceive, waitIRq, cmdBuffer, sendLen, cmdBuffer, &cmdBufferSize, &validBits, 0, false);
 	if (acceptTimeout && result == STATUS_TIMEOUT) {
 		return STATUS_OK;
 	}
@@ -1175,19 +1179,19 @@ uint8_t PCD_MIFARE_Transceive(	uint8_t *sendData,		///< Pointer to the data to t
  *
  * @return const __FlashStringHelper *
  */
-const __FlashStringHelper *GetStatusCodeName(uint8_t code	///< One of the StatusCode enums.
+const char *GetStatusCodeName(uint8_t code	///< One of the StatusCode enums.
 										) {
 	switch (code) {
-		case STATUS_OK:				return F("Success.");										break;
-		case STATUS_ERROR:			return F("Error in communication.");						break;
-		case STATUS_COLLISION:		return F("Collission detected.");							break;
-		case STATUS_TIMEOUT:		return F("Timeout in communication.");						break;
-		case STATUS_NO_ROOM:		return F("A buffer is not big enough.");					break;
-		case STATUS_INTERNAL_ERROR:	return F("Internal error in the code. Should not happen.");	break;
-		case STATUS_INVALID:		return F("Invalid argument.");								break;
-		case STATUS_CRC_WRONG:		return F("The CRC_A does not match.");						break;
-		case STATUS_MIFARE_NACK:	return F("A MIFARE PICC responded with NAK.");				break;
-		default:					return F("Unknown error");									break;
+		case STATUS_OK:				return "Success.";										break;
+		case STATUS_ERROR:			return "Error in communication.";						break;
+		case STATUS_COLLISION:		return "Collission detected.";							break;
+		case STATUS_TIMEOUT:		return "Timeout in communication.";						break;
+		case STATUS_NO_ROOM:		return "A buffer is not big enough.";					break;
+		case STATUS_INTERNAL_ERROR:	return "Internal error in the code. Should not happen.";	break;
+		case STATUS_INVALID:		return "Invalid argument.";								break;
+		case STATUS_CRC_WRONG:		return "The CRC_A does not match.";						break;
+		case STATUS_MIFARE_NACK:	return "A MIFARE PICC responded with NAK.";				break;
+		default:					return "Unknown error";									break;
 	}
 } // End GetStatusCodeName()
 
@@ -1259,7 +1263,7 @@ void PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned from a succe
 	printf("Card UID:");
 	for (uint8_t i = 0; i < uid->size; i++) 
 	{
-		printf("0x02X", uid->uiduint8_t[i]);
+		printf("0x%02X", uid->uidByte[i]);
 	}
 	printf("\r\n");
 
@@ -1275,7 +1279,7 @@ void PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned from a succe
 		case PICC_TYPE_MIFARE_4K:
 			// All keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
 			for (uint8_t i = 0; i < 6; i++) {
-				key.keyuint8_t[i] = 0xFF;
+				key.keyByte[i] = 0xFF;
 			}
 			PICC_DumpMifareClassicToSerial(uid, piccType, &key);
 			break;
@@ -1388,58 +1392,37 @@ void PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to Uid struct
 	uint8_t buffer[18];
 	uint8_t blockAddr;
 	isSectorTrailer = true;
-	for (int8_t blockOffset = no_of_blocks - 1; blockOffset >= 0; blockOffset--) {
+	for (int8_t blockOffset = no_of_blocks - 1; blockOffset >= 0; blockOffset--) 
+	{
 		blockAddr = firstBlock + blockOffset;
 		// Sector number - only on first line
-		if (isSectorTrailer) {
-			if(sector < 10)
-				Serial.print(F("   ")); // Pad with spaces
-			else
-				Serial.print(F("  ")); // Pad with spaces
-			Serial.print(sector);
-			Serial.print(F("   "));
-		}
-		else {
-			Serial.print(F("       "));
+		if (isSectorTrailer) 
+		{
+			printf("sector=%d", sector);
 		}
 		// Block number
-		if(blockAddr < 10)
-			Serial.print(F("   ")); // Pad with spaces
-		else {
-			if(blockAddr < 100)
-				Serial.print(F("  ")); // Pad with spaces
-			else
-				Serial.print(F(" ")); // Pad with spaces
-		}
-		Serial.print(blockAddr);
-		Serial.print(F("  "));
+		printf("blockAddr=%d", blockAddr);
 		// Establish encrypted communications before reading the first block
-		if (isSectorTrailer) {
+		if (isSectorTrailer) 
+		{
 			status = PCD_Authenticate(PICC_CMD_MF_AUTH_KEY_A, firstBlock, key, uid);
 			if (status != STATUS_OK) {
-				Serial.print(F("PCD_Authenticate() failed: "));
-				Serial.println(GetStatusCodeName(status));
+				printf("PCD_Authenticate() failed: %s\r\n",GetStatusCodeName(status));
 				return;
 			}
 		}
 		// Read block
 		uint8_tCount = sizeof(buffer);
 		status = MIFARE_Read(blockAddr, buffer, &uint8_tCount);
-		if (status != STATUS_OK) {
-			Serial.print(F("MIFARE_Read() failed: "));
-			Serial.println(GetStatusCodeName(status));
+		if (status != STATUS_OK) 
+		{
+			printf("MIFARE_Read() failed: %s\r\n",GetStatusCodeName(status));
 			continue;
 		}
 		// Dump data
-		for (uint8_t index = 0; index < 16; index++) {
-			if(buffer[index] < 0x10)
-				Serial.print(F(" 0"));
-			else
-				Serial.print(F(" "));
-			Serial.print(buffer[index], HEX);
-			if ((index % 4) == 3) {
-				Serial.print(F(" "));
-			}
+		for (uint8_t index = 0; index < 16; index++) 
+		{
+			printf("0x%02X ",buffer[index]);
 		}
 		// Parse sector trailer data
 		if (isSectorTrailer) {
@@ -1467,24 +1450,26 @@ void PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to Uid struct
 			firstInGroup = (group == 3) || (group != (blockOffset + 1) / 5);
 		}
 
-		if (firstInGroup) {
+		if (firstInGroup) 
+		{
 			// Print access bits
-			Serial.print(F(" [ "));
-			Serial.print((g[group] >> 2) & 1, DEC); Serial.print(F(" "));
-			Serial.print((g[group] >> 1) & 1, DEC); Serial.print(F(" "));
-			Serial.print((g[group] >> 0) & 1, DEC);
-			Serial.print(F(" ] "));
-			if (invertedError) {
-				Serial.print(F(" Inverted access bits did not match! "));
+			printf(" [ ");
+			printf("%d",(g[group] >> 2) & 1); printf(" ");
+			printf("%d",(g[group] >> 1) & 1); printf(" ");
+			printf("%d",(g[group] >> 0) & 1);
+			printf(" ] ");
+			if (invertedError) 
+			{
+				printf(" Inverted access bits did not match! \r\n");
 			}
 		}
 
 		if (group != 3 && (g[group] == 1 || g[group] == 6)) { // Not a sector trailer, a value block
-			long value = (long(buffer[3])<<24) | (long(buffer[2])<<16) | (long(buffer[1])<<8) | long(buffer[0]);
-			Serial.print(F(" Value=0x")); Serial.print(value, HEX);
-			Serial.print(F(" Adr=0x")); Serial.print(buffer[12], HEX);
+			long value = (long)(buffer[3]<<24) | (long)(buffer[2]<<16) | (long)(buffer[1]<<8) | (long)(buffer[0]);
+			printf(" Value=0x%08X", value);
+			printf(" Adr=0x%02X", buffer[12]);
 		}
-		Serial.println();
+		printf("\r\n");
 	}
 
 	return;
@@ -1499,35 +1484,28 @@ void PICC_DumpMifareUltralightToSerial() {
 	uint8_t buffer[18];
 	uint8_t i;
 
-	Serial.println(F("Page  0  1  2  3"));
+	printf("Page  0  1  2  3");
 	// Try the mpages of the original Ultralight. Ultralight C has more pages.
 	for (uint8_t page = 0; page < 16; page +=4) { // Read returns data for 4 pages at a time.
 		// Read pages
 		uint8_tCount = sizeof(buffer);
 		status = MIFARE_Read(page, buffer, &uint8_tCount);
-		if (status != STATUS_OK) {
-			Serial.print(F("MIFARE_Read() failed: "));
-			Serial.println(GetStatusCodeName(status));
+		if (status != STATUS_OK) 
+		{
+			printf("MIFARE_Read() failed: %s\r\n",GetStatusCodeName(status));
 			break;
 		}
 		// Dump data
-		for (uint8_t offset = 0; offset < 4; offset++) {
+		for (uint8_t offset = 0; offset < 4; offset++) 
+		{
 			i = page + offset;
-			if(i < 10)
-				Serial.print(F("  ")); // Pad with spaces
-			else
-				Serial.print(F(" ")); // Pad with spaces
-			Serial.print(i);
-			Serial.print(F("  "));
-			for (uint8_t index = 0; index < 4; index++) {
+			printf(" %d  ",i);
+			for (uint8_t index = 0; index < 4; index++) 
+			{
 				i = 4 * offset + index;
-				if(buffer[i] < 0x10)
-					Serial.print(F(" 0"));
-				else
-					Serial.print(F(" "));
-				Serial.print(buffer[i], HEX);
+				printf("0x%02X", buffer[i]);
 			}
-			Serial.println();
+			printf("\r\n");
 		}
 	}
 } // End PICC_DumpMifareUltralightToSerial()
@@ -1581,19 +1559,16 @@ bool MIFARE_OpenUidBackdoor(bool logErrors) {
 	uint8_t status = PCD_TransceiveData(&cmd, (uint8_t)1, response, &received, &validBits, (uint8_t)0, false); // 40
 	if(status != STATUS_OK) {
 		if(logErrors) {
-			Serial.println(F("Card did not respond to 0x40 after HALT command. Are you sure it is a UID changeable one?"));
-			Serial.print(F("Error name: "));
-			Serial.println(GetStatusCodeName(status));
+			printf("Card did not respond to 0x40 after HALT command. Are you sure it is a UID changeable one?");
+			printf("Error name: %s\r\n", GetStatusCodeName(status));
 		}
 		return false;
 	}
-	if (received != 1 || response[0] != 0x0A) {
-		if (logErrors) {
-			Serial.print(F("Got bad response on backdoor 0x40 command: "));
-			Serial.print(response[0], HEX);
-			Serial.print(F(" ("));
-			Serial.print(validBits);
-			Serial.print(F(" valid bits)\r\n"));
+	if (received != 1 || response[0] != 0x0A) 
+	{
+		if (logErrors) 
+		{
+			printf("Got bad response on backdoor 0x40 command: 0x%02X [%d valid bits]\r\n",response[0],validBits);
 		}
 		return false;
 	}
@@ -1603,19 +1578,14 @@ bool MIFARE_OpenUidBackdoor(bool logErrors) {
 	status = PCD_TransceiveData(&cmd, (uint8_t)1, response, &received, &validBits, (uint8_t)0, false); // 43
 	if(status != STATUS_OK) {
 		if(logErrors) {
-			Serial.println(F("Error in communication at command 0x43, after successfully executing 0x40"));
-			Serial.print(F("Error name: "));
-			Serial.println(GetStatusCodeName(status));
+			printf("Error in communication at command 0x43, after successfully executing 0x40\r\n");
+			printf("Error name: %s\r\n",GetStatusCodeName(status));
 		}
 		return false;
 	}
 	if (received != 1 || response[0] != 0x0A) {
 		if (logErrors) {
-			Serial.print(F("Got bad response on backdoor 0x43 command: "));
-			Serial.print(response[0], HEX);
-			Serial.print(F(" ("));
-			Serial.print(validBits);
-			Serial.print(F(" valid bits)\r\n"));
+			printf("Got bad response on backdoor 0x43 command: 0x%02X [%d valid bits]\r\n", response[0], validBits);
 		}
 		return false;
 	}
@@ -1637,7 +1607,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 	// UID + BCC uint8_t can not be larger than 16 together
 	if (!newUid || !uidSize || uidSize > 15) {
 		if (logErrors) {
-			Serial.println(F("New UID buffer empty, size 0, or size > 15 given"));
+			printf("New UID buffer empty, size 0, or size > 15 given\r\n");
 		}
 		return false;
 	}
@@ -1656,7 +1626,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 //			  PICC_WakeupA(atqa_answer, &atqa_size);
 
 			if (!PICC_IsNewCardPresent() || !PICC_ReadCardSerial()) {
-				Serial.println(F("No card was previously selected, and none are available. Failed to set UID."));
+				printf("No card was previously selected, and none are available. Failed to set UID.\r\n");
 				return false;
 			}
 
@@ -1664,16 +1634,14 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 			if (status != STATUS_OK) {
 				// We tried, time to give up
 				if (logErrors) {
-					Serial.println(F("Failed to authenticate to card for reading, could not set UID: "));
-					Serial.println(GetStatusCodeName(status));
+					printf("Failed to authenticate to card for reading, could not set UID: %s\r\n",GetStatusCodeName(status));
 				}
 				return false;
 			}
 		}
 		else {
 			if (logErrors) {
-				Serial.print(F("PCD_Authenticate() failed: "));
-				Serial.println(GetStatusCodeName(status));
+				printf("PCD_Authenticate() failed: %s\r\n", GetStatusCodeName(status));
 			}
 			return false;
 		}
@@ -1685,9 +1653,8 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 	status = MIFARE_Read((uint8_t)0, block0_buffer, &uint8_tCount);
 	if (status != STATUS_OK) {
 		if (logErrors) {
-			Serial.print(F("MIFARE_Read() failed: "));
-			Serial.println(GetStatusCodeName(status));
-			Serial.println(F("Are you sure your KEY A for sector 0 is 0xFFFFFFFFFFFF?"));
+			printf("MIFARE_Read() failed: %s\r\n", GetStatusCodeName(status));
+			printf("Are you sure your KEY A for sector 0 is 0xFFFFFFFFFFFF?\r\n");
 		}
 		return false;
 	}
@@ -1708,7 +1675,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 	// Activate UID backdoor
 	if (!MIFARE_OpenUidBackdoor(logErrors)) {
 		if (logErrors) {
-			Serial.println(F("Activating the UID backdoor failed."));
+			printf("Activating the UID backdoor failed.\r\n");
 		}
 		return false;
 	}
@@ -1717,8 +1684,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 	status = MIFARE_Write((uint8_t)0, block0_buffer, (uint8_t)16);
 	if (status != STATUS_OK) {
 		if (logErrors) {
-			Serial.print(F("MIFARE_Write() failed: "));
-			Serial.println(GetStatusCodeName(status));
+			printf("MIFARE_Write() failed: %s\r\n", GetStatusCodeName(status));
 		}
 		return false;
 	}
@@ -1743,7 +1709,7 @@ bool MIFARE_UnbrickUidSector(bool logErrors) {
 	uint8_t status = MIFARE_Write((uint8_t)0, block0_buffer, (uint8_t)16);
 	if (status != STATUS_OK) {
 		if (logErrors) {
-			printf("MIFARE_Write() failed: %d\r\n", GetStatusCodeName(status));
+			printf("MIFARE_Write() failed: %s\r\n", GetStatusCodeName(status));
 		}
 		return false;
 	}
@@ -1776,6 +1742,6 @@ bool PICC_IsNewCardPresent() {
  * @return bool
  */
 bool PICC_ReadCardSerial() {
-	uint8_t result = PICC_Select(&uid);
+	uint8_t result = PICC_Select(&uid, 0);
 	return (result == STATUS_OK);
 } // End PICC_ReadCardSerial()

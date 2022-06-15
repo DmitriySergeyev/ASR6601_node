@@ -3,11 +3,11 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "tremo_rcc.h"
-#include "tremo_gpio.h"
-#include "tremo_i2c.h"
+#include <string.h>
+#include <stdbool.h>
 
 #define RFID_I2C_ADDR 0x28
+
 
 	// MFRC522 registers. Described in chapter 9 of the datasheet.
 enum PCD_Register 
