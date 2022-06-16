@@ -24,6 +24,8 @@ c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../
                               c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-exit.o) (_global_impure_ptr)
 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
                               c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/crt0.o (__libc_init_array)
+c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memcpy.o)
+                              ./objects/cardreader.o (memcpy)
 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memset.o)
                               c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/crt0.o (memset)
 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
@@ -118,7 +120,7 @@ Discarded input sections
                 0x00000000       0xb8 ./objects/tremo_adc.o
  .debug_ranges  0x00000000       0xa8 ./objects/tremo_adc.o
  .debug_line    0x00000000      0x4ab ./objects/tremo_adc.o
- .debug_str     0x00000000      0xc58 ./objects/tremo_adc.o
+ .debug_str     0x00000000      0xc53 ./objects/tremo_adc.o
  .comment       0x00000000       0x4a ./objects/tremo_adc.o
  .debug_frame   0x00000000      0x31c ./objects/tremo_adc.o
  .ARM.attributes
@@ -153,7 +155,7 @@ Discarded input sections
                 0x00000000       0x68 ./objects/tremo_bstimer.o
  .debug_ranges  0x00000000       0x58 ./objects/tremo_bstimer.o
  .debug_line    0x00000000      0x2ee ./objects/tremo_bstimer.o
- .debug_str     0x00000000      0x820 ./objects/tremo_bstimer.o
+ .debug_str     0x00000000      0x81b ./objects/tremo_bstimer.o
  .comment       0x00000000       0x4a ./objects/tremo_bstimer.o
  .debug_frame   0x00000000      0x19c ./objects/tremo_bstimer.o
  .ARM.attributes
@@ -178,7 +180,7 @@ Discarded input sections
                 0x00000000       0x40 ./objects/tremo_crc.o
  .debug_ranges  0x00000000       0x30 ./objects/tremo_crc.o
  .debug_line    0x00000000      0x2f5 ./objects/tremo_crc.o
- .debug_str     0x00000000      0x6fe ./objects/tremo_crc.o
+ .debug_str     0x00000000      0x6f9 ./objects/tremo_crc.o
  .comment       0x00000000       0x4a ./objects/tremo_crc.o
  .debug_frame   0x00000000       0xcc ./objects/tremo_crc.o
  .ARM.attributes
@@ -212,17 +214,13 @@ Discarded input sections
                 0x00000000       0x68 ./objects/tremo_dac.o
  .debug_ranges  0x00000000       0x58 ./objects/tremo_dac.o
  .debug_line    0x00000000      0x2e2 ./objects/tremo_dac.o
- .debug_str     0x00000000      0x964 ./objects/tremo_dac.o
+ .debug_str     0x00000000      0x95f ./objects/tremo_dac.o
  .comment       0x00000000       0x4a ./objects/tremo_dac.o
  .debug_frame   0x00000000      0x18c ./objects/tremo_dac.o
  .ARM.attributes
                 0x00000000       0x32 ./objects/tremo_dac.o
  .text          0x00000000        0x0 ./objects/tremo_delay.o
  .data          0x00000000        0x0 ./objects/tremo_delay.o
- .text.delay_us
-                0x00000000       0x88 ./objects/tremo_delay.o
- .text.delay_ms
-                0x00000000       0x20 ./objects/tremo_delay.o
  .text          0x00000000        0x0 ./objects/tremo_dma.o
  .data          0x00000000        0x0 ./objects/tremo_dma.o
  .bss           0x00000000       0x20 ./objects/tremo_dma.o
@@ -267,7 +265,7 @@ Discarded input sections
                 0x00000000       0xa0 ./objects/tremo_dma.o
  .debug_ranges  0x00000000       0x90 ./objects/tremo_dma.o
  .debug_line    0x00000000      0xd98 ./objects/tremo_dma.o
- .debug_str     0x00000000      0xc02 ./objects/tremo_dma.o
+ .debug_str     0x00000000      0xbfd ./objects/tremo_dma.o
  .comment       0x00000000       0x4a ./objects/tremo_dma.o
  .debug_frame   0x00000000      0x2ac ./objects/tremo_dma.o
  .ARM.attributes
@@ -292,7 +290,7 @@ Discarded input sections
                 0x00000000       0x40 ./objects/tremo_flash.o
  .debug_ranges  0x00000000       0x30 ./objects/tremo_flash.o
  .debug_line    0x00000000      0x4d2 ./objects/tremo_flash.o
- .debug_str     0x00000000      0x401 ./objects/tremo_flash.o
+ .debug_str     0x00000000      0x3fc ./objects/tremo_flash.o
  .comment       0x00000000       0x4a ./objects/tremo_flash.o
  .debug_frame   0x00000000       0xc8 ./objects/tremo_flash.o
  .ARM.attributes
@@ -302,10 +300,6 @@ Discarded input sections
  .bss           0x00000000        0x0 ./objects/tremo_gpio.o
  .text.gpio_deinit
                 0x00000000       0x38 ./objects/tremo_gpio.o
- .text.gpio_init
-                0x00000000      0x354 ./objects/tremo_gpio.o
- .text.gpio_write
-                0x00000000      0x1cc ./objects/tremo_gpio.o
  .text.gpio_read
                 0x00000000       0x30 ./objects/tremo_gpio.o
  .text.gpio_toggle
@@ -333,22 +327,8 @@ Discarded input sections
                 0x00000000       0x70 ./objects/tremo_i2c.o
  .text.i2c_clear_interrupt
                 0x00000000       0x26 ./objects/tremo_i2c.o
- .text.i2c_master_send_start
-                0x00000000       0x7a ./objects/tremo_i2c.o
- .text.i2c_master_send_stop
-                0x00000000       0x2c ./objects/tremo_i2c.o
  .text.i2c_master_send_stop_with_data
                 0x00000000       0x5a ./objects/tremo_i2c.o
- .text.i2c_send_data
-                0x00000000       0x4e ./objects/tremo_i2c.o
- .text.i2c_receive_data
-                0x00000000       0x34 ./objects/tremo_i2c.o
- .text.i2c_set_receive_mode
-                0x00000000       0x72 ./objects/tremo_i2c.o
- .text.i2c_clear_flag_status
-                0x00000000       0x26 ./objects/tremo_i2c.o
- .text.i2c_get_flag_status
-                0x00000000       0x50 ./objects/tremo_i2c.o
  .text.i2c_get_interrupt_status
                 0x00000000       0x30 ./objects/tremo_i2c.o
  .text          0x00000000        0x0 ./objects/tremo_i2s.o
@@ -390,7 +370,7 @@ Discarded input sections
                 0x00000000       0x90 ./objects/tremo_i2s.o
  .debug_ranges  0x00000000       0x80 ./objects/tremo_i2s.o
  .debug_line    0x00000000      0x3e7 ./objects/tremo_i2s.o
- .debug_str     0x00000000      0x808 ./objects/tremo_i2s.o
+ .debug_str     0x00000000      0x803 ./objects/tremo_i2s.o
  .comment       0x00000000       0x4a ./objects/tremo_i2s.o
  .debug_frame   0x00000000      0x25c ./objects/tremo_i2s.o
  .ARM.attributes
@@ -427,7 +407,7 @@ Discarded input sections
                 0x00000000       0x70 ./objects/tremo_iwdg.o
  .debug_ranges  0x00000000       0x60 ./objects/tremo_iwdg.o
  .debug_line    0x00000000      0x320 ./objects/tremo_iwdg.o
- .debug_str     0x00000000      0x728 ./objects/tremo_iwdg.o
+ .debug_str     0x00000000      0x723 ./objects/tremo_iwdg.o
  .comment       0x00000000       0x4a ./objects/tremo_iwdg.o
  .debug_frame   0x00000000      0x178 ./objects/tremo_iwdg.o
  .ARM.attributes
@@ -484,7 +464,7 @@ Discarded input sections
                 0x00000000       0xc0 ./objects/tremo_lcd.o
  .debug_ranges  0x00000000       0xb0 ./objects/tremo_lcd.o
  .debug_line    0x00000000      0x752 ./objects/tremo_lcd.o
- .debug_str     0x00000000      0xc13 ./objects/tremo_lcd.o
+ .debug_str     0x00000000      0xc0e ./objects/tremo_lcd.o
  .comment       0x00000000       0x4a ./objects/tremo_lcd.o
  .debug_frame   0x00000000      0x310 ./objects/tremo_lcd.o
  .ARM.attributes
@@ -545,7 +525,7 @@ Discarded input sections
                 0x00000000       0xd0 ./objects/tremo_lptimer.o
  .debug_ranges  0x00000000       0xc0 ./objects/tremo_lptimer.o
  .debug_line    0x00000000      0x720 ./objects/tremo_lptimer.o
- .debug_str     0x00000000      0xefb ./objects/tremo_lptimer.o
+ .debug_str     0x00000000      0xef6 ./objects/tremo_lptimer.o
  .comment       0x00000000       0x4a ./objects/tremo_lptimer.o
  .debug_frame   0x00000000      0x360 ./objects/tremo_lptimer.o
  .ARM.attributes
@@ -592,7 +572,7 @@ Discarded input sections
                 0x00000000       0x98 ./objects/tremo_lpuart.o
  .debug_ranges  0x00000000       0x88 ./objects/tremo_lpuart.o
  .debug_line    0x00000000      0x4ac ./objects/tremo_lpuart.o
- .debug_str     0x00000000      0xc59 ./objects/tremo_lpuart.o
+ .debug_str     0x00000000      0xc54 ./objects/tremo_lpuart.o
  .comment       0x00000000       0x4a ./objects/tremo_lpuart.o
  .debug_frame   0x00000000      0x280 ./objects/tremo_lpuart.o
  .ARM.attributes
@@ -625,7 +605,7 @@ Discarded input sections
                 0x00000000       0x60 ./objects/tremo_pwr.o
  .debug_ranges  0x00000000       0x50 ./objects/tremo_pwr.o
  .debug_line    0x00000000      0x335 ./objects/tremo_pwr.o
- .debug_str     0x00000000      0x6d8 ./objects/tremo_pwr.o
+ .debug_str     0x00000000      0x6d3 ./objects/tremo_pwr.o
  .comment       0x00000000       0x4a ./objects/tremo_pwr.o
  .debug_frame   0x00000000      0x154 ./objects/tremo_pwr.o
  .ARM.attributes
@@ -785,7 +765,7 @@ Discarded input sections
                 0x00000000      0x120 ./objects/tremo_rtc.o
  .debug_ranges  0x00000000      0x110 ./objects/tremo_rtc.o
  .debug_line    0x00000000      0xc91 ./objects/tremo_rtc.o
- .debug_str     0x00000000      0xeae ./objects/tremo_rtc.o
+ .debug_str     0x00000000      0xea9 ./objects/tremo_rtc.o
  .comment       0x00000000       0x4a ./objects/tremo_rtc.o
  .debug_frame   0x00000000      0x4b8 ./objects/tremo_rtc.o
  .ARM.attributes
@@ -817,7 +797,7 @@ Discarded input sections
                 0x00000000       0x60 ./objects/tremo_spi.o
  .debug_ranges  0x00000000       0x50 ./objects/tremo_spi.o
  .debug_line    0x00000000      0x3db ./objects/tremo_spi.o
- .debug_str     0x00000000      0x7c6 ./objects/tremo_spi.o
+ .debug_str     0x00000000      0x7c1 ./objects/tremo_spi.o
  .comment       0x00000000       0x4a ./objects/tremo_spi.o
  .debug_frame   0x00000000      0x168 ./objects/tremo_spi.o
  .ARM.attributes
@@ -838,7 +818,7 @@ Discarded input sections
                 0x00000000       0x30 ./objects/tremo_system.o
  .debug_ranges  0x00000000       0x20 ./objects/tremo_system.o
  .debug_line    0x00000000      0x1f2 ./objects/tremo_system.o
- .debug_str     0x00000000      0x3d6 ./objects/tremo_system.o
+ .debug_str     0x00000000      0x3d1 ./objects/tremo_system.o
  .comment       0x00000000       0x4a ./objects/tremo_system.o
  .debug_frame   0x00000000       0x6c ./objects/tremo_system.o
  .ARM.attributes
@@ -927,7 +907,7 @@ Discarded input sections
                 0x00000000      0x140 ./objects/tremo_timer.o
  .debug_ranges  0x00000000      0x130 ./objects/tremo_timer.o
  .debug_line    0x00000000      0x921 ./objects/tremo_timer.o
- .debug_str     0x00000000     0x2264 ./objects/tremo_timer.o
+ .debug_str     0x00000000     0x225f ./objects/tremo_timer.o
  .comment       0x00000000       0x4a ./objects/tremo_timer.o
  .debug_frame   0x00000000      0x5c8 ./objects/tremo_timer.o
  .ARM.attributes
@@ -975,7 +955,7 @@ Discarded input sections
                 0x00000000       0x38 ./objects/tremo_wdg.o
  .debug_ranges  0x00000000       0x28 ./objects/tremo_wdg.o
  .debug_line    0x00000000      0x1bd ./objects/tremo_wdg.o
- .debug_str     0x00000000      0x6ab ./objects/tremo_wdg.o
+ .debug_str     0x00000000      0x6a6 ./objects/tremo_wdg.o
  .comment       0x00000000       0x4a ./objects/tremo_wdg.o
  .debug_frame   0x00000000       0x94 ./objects/tremo_wdg.o
  .ARM.attributes
@@ -986,21 +966,51 @@ Discarded input sections
  .text          0x00000000        0x0 ./objects/tremo_it.o
  .data          0x00000000        0x0 ./objects/tremo_it.o
  .bss           0x00000000        0x0 ./objects/tremo_it.o
+ .text          0x00000000        0x0 ./objects/cardreader.o
+ .data          0x00000000        0x0 ./objects/cardreader.o
+ .text.PCD_AntennaOff
+                0x00000000       0x10 ./objects/cardreader.o
+ .text.PCD_GetAntennaGain
+                0x00000000       0x16 ./objects/cardreader.o
+ .text.PCD_SetAntennaGain
+                0x00000000       0x38 ./objects/cardreader.o
+ .text.PCD_PerformSelfTest
+                0x00000000      0x160 ./objects/cardreader.o
+ .text.PICC_WakeupA
+                0x00000000       0x1e ./objects/cardreader.o
+ .text.MIFARE_Write
+                0x00000000       0x68 ./objects/cardreader.o
+ .text.MIFARE_Ultralight_Write
+                0x00000000       0x56 ./objects/cardreader.o
+ .text.MIFARE_Decrement
+                0x00000000       0x22 ./objects/cardreader.o
+ .text.MIFARE_Increment
+                0x00000000       0x22 ./objects/cardreader.o
+ .text.MIFARE_Restore
+                0x00000000       0x20 ./objects/cardreader.o
+ .text.MIFARE_TwoStepHelper
+                0x00000000       0x58 ./objects/cardreader.o
+ .text.MIFARE_Transfer
+                0x00000000       0x38 ./objects/cardreader.o
+ .text.MIFARE_GetValue
+                0x00000000       0x4c ./objects/cardreader.o
+ .text.MIFARE_SetValue
+                0x00000000       0x86 ./objects/cardreader.o
+ .text.PCD_MIFARE_Transceive
+                0x00000000       0xce ./objects/cardreader.o
+ .text.MIFARE_SetAccessBits
+                0x00000000      0x130 ./objects/cardreader.o
+ .text.MIFARE_OpenUidBackdoor
+                0x00000000      0x138 ./objects/cardreader.o
+ .text.MIFARE_SetUid
+                0x00000000      0x224 ./objects/cardreader.o
+ .text.MIFARE_UnbrickUidSector
+                0x00000000       0x64 ./objects/cardreader.o
  .text          0x00000000        0x0 ./objects/device.o
  .data          0x00000000        0x0 ./objects/device.o
  .bss           0x00000000        0x0 ./objects/device.o
  .text          0x00000000        0x0 ./objects/i2c.o
  .data          0x00000000        0x0 ./objects/i2c.o
- .text.device_i2c_write
-                0x00000000       0x84 ./objects/i2c.o
- .text.device_i2c_begin_read
-                0x00000000       0x44 ./objects/i2c.o
- .text.device_i2c_read
-                0x00000000       0x38 ./objects/i2c.o
- .text.device_i2c_read_available
-                0x00000000       0x20 ./objects/i2c.o
- .text.device_i2c_stop_read
-                0x00000000       0x14 ./objects/i2c.o
  .text          0x00000000        0x0 ./objects/debug.o
  .data          0x00000000        0x0 ./objects/debug.o
  .text          0x00000000      0x254 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_muldf3.o)
@@ -1041,6 +1051,11 @@ Discarded input sections
  .text          0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
  .data          0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
  .bss           0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
+ .text          0x00000000      0x134 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memcpy.o)
+ .data          0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memcpy.o)
+ .bss           0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memcpy.o)
+ .ARM.attributes
+                0x00000000       0x1c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memcpy.o)
  .text          0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memset.o)
  .data          0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memset.o)
  .bss           0x00000000        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-memset.o)
@@ -1147,6 +1162,7 @@ LOAD ./objects/tremo_uart.o
 LOAD ./objects/tremo_wdg.o
 LOAD ./objects/main.o
 LOAD ./objects/tremo_it.o
+LOAD ./objects/cardreader.o
 LOAD ./objects/device.o
 LOAD ./objects/i2c.o
 LOAD ./objects/debug.o
@@ -1167,7 +1183,7 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
                 0x08000000                g_pfnVectors
                 0x080000d4                . = ALIGN (0x4)
 
-.text           0x080000d8     0x3c50
+.text           0x080000d8     0x5b60
                 0x080000d8                . = ALIGN (0x4)
  *(.text)
  .text          0x080000d8       0x40 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
@@ -1305,188 +1321,337 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .text.delay_init
                 0x080027c0       0x68 ./objects/tremo_delay.o
                 0x080027c0                delay_init
+ .text.delay_us
+                0x08002828       0x88 ./objects/tremo_delay.o
+                0x08002828                delay_us
+ .text.delay_ms
+                0x080028b0       0x20 ./objects/tremo_delay.o
+                0x080028b0                delay_ms
+ .text.gpio_init
+                0x080028d0      0x354 ./objects/tremo_gpio.o
+                0x080028d0                gpio_init
+ .text.gpio_write
+                0x08002c24      0x1cc ./objects/tremo_gpio.o
+                0x08002c24                gpio_write
  .text.gpio_set_iomux
-                0x08002828       0xbc ./objects/tremo_gpio.o
-                0x08002828                gpio_set_iomux
+                0x08002df0       0xbc ./objects/tremo_gpio.o
+                0x08002df0                gpio_set_iomux
  .text.unit_reset
-                0x080028e4       0x6c ./objects/tremo_i2c.o
+                0x08002eac       0x6c ./objects/tremo_i2c.o
  .text.i2c_config_init
-                0x08002950       0x26 ./objects/tremo_i2c.o
-                0x08002950                i2c_config_init
- *fill*         0x08002976        0x2 
+                0x08002f18       0x26 ./objects/tremo_i2c.o
+                0x08002f18                i2c_config_init
+ *fill*         0x08002f3e        0x2 
  .text.i2c_init
-                0x08002978       0xd0 ./objects/tremo_i2c.o
-                0x08002978                i2c_init
- .text.i2c_cmd  0x08002a48       0x58 ./objects/tremo_i2c.o
-                0x08002a48                i2c_cmd
+                0x08002f40       0xd0 ./objects/tremo_i2c.o
+                0x08002f40                i2c_init
+ .text.i2c_cmd  0x08003010       0x58 ./objects/tremo_i2c.o
+                0x08003010                i2c_cmd
+ .text.i2c_master_send_start
+                0x08003068       0x7a ./objects/tremo_i2c.o
+                0x08003068                i2c_master_send_start
+ .text.i2c_master_send_stop
+                0x080030e2       0x2c ./objects/tremo_i2c.o
+                0x080030e2                i2c_master_send_stop
+ .text.i2c_send_data
+                0x0800310e       0x4e ./objects/tremo_i2c.o
+                0x0800310e                i2c_send_data
+ .text.i2c_receive_data
+                0x0800315c       0x34 ./objects/tremo_i2c.o
+                0x0800315c                i2c_receive_data
+ .text.i2c_set_receive_mode
+                0x08003190       0x72 ./objects/tremo_i2c.o
+                0x08003190                i2c_set_receive_mode
+ .text.i2c_clear_flag_status
+                0x08003202       0x26 ./objects/tremo_i2c.o
+                0x08003202                i2c_clear_flag_status
+ .text.i2c_get_flag_status
+                0x08003228       0x50 ./objects/tremo_i2c.o
+                0x08003228                i2c_get_flag_status
  .text.rcc_get_clk_freq
-                0x08002aa0      0x16c ./objects/tremo_rcc.o
-                0x08002aa0                rcc_get_clk_freq
+                0x08003278      0x16c ./objects/tremo_rcc.o
+                0x08003278                rcc_get_clk_freq
  .text.rcc_get_uart0_clk_source
-                0x08002c0c       0x18 ./objects/tremo_rcc.o
-                0x08002c0c                rcc_get_uart0_clk_source
+                0x080033e4       0x18 ./objects/tremo_rcc.o
+                0x080033e4                rcc_get_uart0_clk_source
  .text.rcc_get_uart1_clk_source
-                0x08002c24       0x1c ./objects/tremo_rcc.o
-                0x08002c24                rcc_get_uart1_clk_source
+                0x080033fc       0x1c ./objects/tremo_rcc.o
+                0x080033fc                rcc_get_uart1_clk_source
  .text.rcc_get_uart2_clk_source
-                0x08002c40       0x1c ./objects/tremo_rcc.o
-                0x08002c40                rcc_get_uart2_clk_source
+                0x08003418       0x1c ./objects/tremo_rcc.o
+                0x08003418                rcc_get_uart2_clk_source
  .text.rcc_get_uart3_clk_source
-                0x08002c5c       0x1c ./objects/tremo_rcc.o
-                0x08002c5c                rcc_get_uart3_clk_source
+                0x08003434       0x1c ./objects/tremo_rcc.o
+                0x08003434                rcc_get_uart3_clk_source
  .text.rcc_enable_peripheral_clk
-                0x08002c78      0xafc ./objects/tremo_rcc.o
-                0x08002c78                rcc_enable_peripheral_clk
+                0x08003450      0xafc ./objects/tremo_rcc.o
+                0x08003450                rcc_enable_peripheral_clk
  .text.calc_uart_baud
-                0x08003774       0x72 ./objects/tremo_uart.o
+                0x08003f4c       0x72 ./objects/tremo_uart.o
  .text.uart_get_flag_status
-                0x080037e6       0x28 ./objects/tremo_uart.o
-                0x080037e6                uart_get_flag_status
+                0x08003fbe       0x28 ./objects/tremo_uart.o
+                0x08003fbe                uart_get_flag_status
  .text.uart_send_data
-                0x0800380e       0x2a ./objects/tremo_uart.o
-                0x0800380e                uart_send_data
+                0x08003fe6       0x2a ./objects/tremo_uart.o
+                0x08003fe6                uart_send_data
  .text.uart_config_init
-                0x08003838       0x40 ./objects/tremo_uart.o
-                0x08003838                uart_config_init
+                0x08004010       0x40 ./objects/tremo_uart.o
+                0x08004010                uart_config_init
  .text.uart_cmd
-                0x08003878       0x38 ./objects/tremo_uart.o
-                0x08003878                uart_cmd
+                0x08004050       0x38 ./objects/tremo_uart.o
+                0x08004050                uart_cmd
  .text.uart_init
-                0x080038b0      0x1ec ./objects/tremo_uart.o
-                0x080038b0                uart_init
- .text.main     0x08003a9c       0x14 ./objects/main.o
-                0x08003a9c                main
+                0x08004088      0x1ec ./objects/tremo_uart.o
+                0x08004088                uart_init
+ .text.ShowReaderDetails
+                0x08004274       0x6c ./objects/main.o
+                0x08004274                ShowReaderDetails
+ .text.Start    0x080042e0       0x1c ./objects/main.o
+ .text.Loop     0x080042fc       0x38 ./objects/main.o
+ .text.main     0x08004334       0x1c ./objects/main.o
+                0x08004334                main
  .text.NMI_Handler
-                0x08003ab0        0xe ./objects/tremo_it.o
-                0x08003ab0                NMI_Handler
+                0x08004350        0xe ./objects/tremo_it.o
+                0x08004350                NMI_Handler
  .text.HardFault_Handler
-                0x08003abe        0x6 ./objects/tremo_it.o
-                0x08003abe                HardFault_Handler
+                0x0800435e        0x6 ./objects/tremo_it.o
+                0x0800435e                HardFault_Handler
  .text.MemManage_Handler
-                0x08003ac4        0x6 ./objects/tremo_it.o
-                0x08003ac4                MemManage_Handler
+                0x08004364        0x6 ./objects/tremo_it.o
+                0x08004364                MemManage_Handler
  .text.BusFault_Handler
-                0x08003aca        0x6 ./objects/tremo_it.o
-                0x08003aca                BusFault_Handler
+                0x0800436a        0x6 ./objects/tremo_it.o
+                0x0800436a                BusFault_Handler
  .text.UsageFault_Handler
-                0x08003ad0        0x6 ./objects/tremo_it.o
-                0x08003ad0                UsageFault_Handler
+                0x08004370        0x6 ./objects/tremo_it.o
+                0x08004370                UsageFault_Handler
  .text.SVC_Handler
-                0x08003ad6        0xe ./objects/tremo_it.o
-                0x08003ad6                SVC_Handler
+                0x08004376        0xe ./objects/tremo_it.o
+                0x08004376                SVC_Handler
  .text.PendSV_Handler
-                0x08003ae4        0xe ./objects/tremo_it.o
-                0x08003ae4                PendSV_Handler
+                0x08004384        0xe ./objects/tremo_it.o
+                0x08004384                PendSV_Handler
  .text.SysTick_Handler
-                0x08003af2        0xe ./objects/tremo_it.o
-                0x08003af2                SysTick_Handler
+                0x08004392        0xe ./objects/tremo_it.o
+                0x08004392                SysTick_Handler
  .text.PWR_IRQHandler
-                0x08003b00        0xe ./objects/tremo_it.o
-                0x08003b00                PWR_IRQHandler
- *fill*         0x08003b0e        0x2 
+                0x080043a0        0xe ./objects/tremo_it.o
+                0x080043a0                PWR_IRQHandler
+ .text.PCD_WriteRegister
+                0x080043ae       0x2e ./objects/cardreader.o
+                0x080043ae                PCD_WriteRegister
+ .text.PCD_WriteRegisterEx
+                0x080043dc       0xa8 ./objects/cardreader.o
+                0x080043dc                PCD_WriteRegisterEx
+ .text.PCD_ReadRegister
+                0x08004484       0x38 ./objects/cardreader.o
+                0x08004484                PCD_ReadRegister
+ .text.PCD_ReadRegisterEx
+                0x080044bc       0xd0 ./objects/cardreader.o
+                0x080044bc                PCD_ReadRegisterEx
+ .text.PCD_SetRegisterBitMask
+                0x0800458c       0x36 ./objects/cardreader.o
+                0x0800458c                PCD_SetRegisterBitMask
+ .text.PCD_ClearRegisterBitMask
+                0x080045c2       0x40 ./objects/cardreader.o
+                0x080045c2                PCD_ClearRegisterBitMask
+ .text.PCD_CalculateCRC
+                0x08004602       0x94 ./objects/cardreader.o
+                0x08004602                PCD_CalculateCRC
+ .text.PCD_Init
+                0x08004696       0x4a ./objects/cardreader.o
+                0x08004696                PCD_Init
+ .text.PCD_Reset
+                0x080046e0       0x2a ./objects/cardreader.o
+                0x080046e0                PCD_Reset
+ .text.PCD_AntennaOn
+                0x0800470a       0x32 ./objects/cardreader.o
+                0x0800470a                PCD_AntennaOn
+ .text.PCD_TransceiveData
+                0x0800473c       0x44 ./objects/cardreader.o
+                0x0800473c                PCD_TransceiveData
+ .text.PCD_CommunicateWithPICC
+                0x08004780      0x1ba ./objects/cardreader.o
+                0x08004780                PCD_CommunicateWithPICC
+ .text.PICC_RequestA
+                0x0800493a       0x1e ./objects/cardreader.o
+                0x0800493a                PICC_RequestA
+ .text.PICC_REQA_or_WUPA
+                0x08004958       0x72 ./objects/cardreader.o
+                0x08004958                PICC_REQA_or_WUPA
+ .text.PICC_Select
+                0x080049ca      0x490 ./objects/cardreader.o
+                0x080049ca                PICC_Select
+ .text.PICC_HaltA
+                0x08004e5a       0x64 ./objects/cardreader.o
+                0x08004e5a                PICC_HaltA
+ .text.PCD_Authenticate
+                0x08004ebe       0x94 ./objects/cardreader.o
+                0x08004ebe                PCD_Authenticate
+ .text.PCD_StopCrypto1
+                0x08004f52       0x10 ./objects/cardreader.o
+                0x08004f52                PCD_StopCrypto1
+ .text.MIFARE_Read
+                0x08004f62       0x6c ./objects/cardreader.o
+                0x08004f62                MIFARE_Read
+ *fill*         0x08004fce        0x2 
+ .text.GetStatusCodeName
+                0x08004fd0       0x98 ./objects/cardreader.o
+                0x08004fd0                GetStatusCodeName
+ .text.PICC_GetType
+                0x08005068       0xcc ./objects/cardreader.o
+                0x08005068                PICC_GetType
+ .text.PICC_GetTypeName
+                0x08005134       0xa0 ./objects/cardreader.o
+                0x08005134                PICC_GetTypeName
+ .text.PICC_DumpToSerial
+                0x080051d4       0xf8 ./objects/cardreader.o
+                0x080051d4                PICC_DumpToSerial
+ .text.PICC_DumpMifareClassicToSerial
+                0x080052cc       0x84 ./objects/cardreader.o
+                0x080052cc                PICC_DumpMifareClassicToSerial
+ .text.PICC_DumpMifareClassicSectorToSerial
+                0x08005350      0x430 ./objects/cardreader.o
+                0x08005350                PICC_DumpMifareClassicSectorToSerial
+ .text.PICC_DumpMifareUltralightToSerial
+                0x08005780       0xc8 ./objects/cardreader.o
+                0x08005780                PICC_DumpMifareUltralightToSerial
+ .text.PICC_IsNewCardPresent
+                0x08005848       0x3a ./objects/cardreader.o
+                0x08005848                PICC_IsNewCardPresent
+ *fill*         0x08005882        0x2 
+ .text.PICC_ReadCardSerial
+                0x08005884       0x2c ./objects/cardreader.o
+                0x08005884                PICC_ReadCardSerial
  .text.device_init
-                0x08003b10       0x30 ./objects/device.o
-                0x08003b10                device_init
+                0x080058b0       0x30 ./objects/device.o
+                0x080058b0                device_init
  .text.device_i2c_init
-                0x08003b40       0x50 ./objects/i2c.o
-                0x08003b40                device_i2c_init
+                0x080058e0       0x54 ./objects/i2c.o
+                0x080058e0                device_i2c_init
+ .text.device_i2c_write
+                0x08005934       0x84 ./objects/i2c.o
+                0x08005934                device_i2c_write
+ .text.device_i2c_begin_read
+                0x080059b8       0x44 ./objects/i2c.o
+                0x080059b8                device_i2c_begin_read
+ .text.device_i2c_read
+                0x080059fc       0x38 ./objects/i2c.o
+                0x080059fc                device_i2c_read
+ .text.device_i2c_read_available
+                0x08005a34       0x20 ./objects/i2c.o
+                0x08005a34                device_i2c_read_available
+ .text.device_i2c_stop_read
+                0x08005a54       0x14 ./objects/i2c.o
+                0x08005a54                device_i2c_stop_read
+ .text.delay    0x08005a68       0x16 ./objects/i2c.o
+                0x08005a68                delay
+ *fill*         0x08005a7e        0x2 
+ .text.cr_reset
+                0x08005a80       0x20 ./objects/i2c.o
+                0x08005a80                cr_reset
  .text.device_debug_init
-                0x08003b90       0x58 ./objects/debug.o
-                0x08003b90                device_debug_init
+                0x08005aa0       0x58 ./objects/debug.o
+                0x08005aa0                device_debug_init
  .text.__libc_init_array
-                0x08003be8       0x48 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
-                0x08003be8                __libc_init_array
+                0x08005af8       0x48 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
+                0x08005af8                __libc_init_array
  .text.startup.register_fini
-                0x08003c30       0x14 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
- .text.atexit   0x08003c44        0xc c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-atexit.o)
-                0x08003c44                atexit
+                0x08005b40       0x14 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
+ .text.atexit   0x08005b54        0xc c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-atexit.o)
+                0x08005b54                atexit
  .text.__libc_fini_array
-                0x08003c50       0x2c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-fini.o)
-                0x08003c50                __libc_fini_array
+                0x08005b60       0x2c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-fini.o)
+                0x08005b60                __libc_fini_array
  .text.__retarget_lock_acquire_recursive
-                0x08003c7c        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
-                0x08003c7c                __retarget_lock_acquire_recursive
+                0x08005b8c        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
+                0x08005b8c                __retarget_lock_acquire_recursive
  .text.__retarget_lock_release_recursive
-                0x08003c80        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
-                0x08003c80                __retarget_lock_release_recursive
+                0x08005b90        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
+                0x08005b90                __retarget_lock_release_recursive
  .text.__register_exitproc
-                0x08003c84       0x8c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__atexit.o)
-                0x08003c84                __register_exitproc
+                0x08005b94       0x8c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__atexit.o)
+                0x08005b94                __register_exitproc
  *(.glue_7)
- .glue_7        0x08003d10        0x0 linker stubs
+ .glue_7        0x08005c20        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x08003d10        0x0 linker stubs
+ .glue_7t       0x08005c20        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x08003d10        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
+ .eh_frame      0x08005c20        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
  *(.init)
- .init          0x08003d10        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crti.o
-                0x08003d10                _init
- .init          0x08003d14        0x8 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtn.o
+ .init          0x08005c20        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crti.o
+                0x08005c20                _init
+ .init          0x08005c24        0x8 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtn.o
  *(.fini)
- .fini          0x08003d1c        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crti.o
-                0x08003d1c                _fini
- .fini          0x08003d20        0x8 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtn.o
-                0x08003d28                . = ALIGN (0x4)
-                0x08003d28                _etext = .
+ .fini          0x08005c2c        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crti.o
+                0x08005c2c                _fini
+ .fini          0x08005c30        0x8 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtn.o
+                0x08005c38                . = ALIGN (0x4)
+                0x08005c38                _etext = .
 
-.vfp11_veneer   0x08003d28        0x0
- .vfp11_veneer  0x08003d28        0x0 linker stubs
+.vfp11_veneer   0x08005c38        0x0
+ .vfp11_veneer  0x08005c38        0x0 linker stubs
 
-.v4_bx          0x08003d28        0x0
- .v4_bx         0x08003d28        0x0 linker stubs
+.v4_bx          0x08005c38        0x0
+ .v4_bx         0x08005c38        0x0 linker stubs
 
-.iplt           0x08003d28        0x0
- .iplt          0x08003d28        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
+.iplt           0x08005c38        0x0
+ .iplt          0x08005c38        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
 
-.rodata         0x08003d28       0xb4
-                0x08003d28                . = ALIGN (0x4)
+.rodata         0x08005c38      0x8a8
+                0x08005c38                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x08003d28       0x70 ./objects/printf-stdarg.o
- .rodata        0x08003d98       0x16 ./objects/main.o
- *fill*         0x08003dae        0x2 
- .rodata        0x08003db0       0x27 ./objects/device.o
+ .rodata        0x08005c38       0x70 ./objects/printf-stdarg.o
+ .rodata        0x08005ca8       0xde ./objects/main.o
+ *fill*         0x08005d86        0x2 
+ .rodata        0x08005d88      0x72c ./objects/cardreader.o
+                0x08005d88                MFRC522_firmware_referenceV0_0
+                0x08005dc8                MFRC522_firmware_referenceV1_0
+                0x08005e08                MFRC522_firmware_referenceV2_0
+                0x08005e48                FM17522_firmware_reference
+ .rodata        0x080064b4       0x27 ./objects/device.o
  *(.rodata*)
- *fill*         0x08003dd7        0x1 
+ *fill*         0x080064db        0x1 
  .rodata._global_impure_ptr
-                0x08003dd8        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-impure.o)
-                0x08003dd8                _global_impure_ptr
-                0x08003ddc                . = ALIGN (0x4)
+                0x080064dc        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-impure.o)
+                0x080064dc                _global_impure_ptr
+                0x080064e0                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x08003ddc        0x8
-                0x08003ddc                __exidx_start = .
+.ARM            0x080064e0        0x8
+                0x080064e0                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x08003ddc        0x8 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_udivmoddi4.o)
-                0x08003de4                __exidx_end = .
+ .ARM.exidx     0x080064e0        0x8 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_udivmoddi4.o)
+                0x080064e8                __exidx_end = .
 
-.rel.dyn        0x08003de4        0x0
- .rel.iplt      0x08003de4        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
+.rel.dyn        0x080064e8        0x0
+ .rel.iplt      0x080064e8        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
 
-.preinit_array  0x08003de4        0x0
-                0x08003de4                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x080064e8        0x0
+                0x080064e8                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x08003de4                PROVIDE (__preinit_array_end = .)
+                0x080064e8                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x08003de4        0x8
-                0x08003de4                PROVIDE (__init_array_start = .)
+.init_array     0x080064e8        0x8
+                0x080064e8                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  .init_array.00000
-                0x08003de4        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
+                0x080064e8        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
  *(.init_array*)
- .init_array    0x08003de8        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
-                0x08003dec                PROVIDE (__init_array_end = .)
+ .init_array    0x080064ec        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
+                0x080064f0                PROVIDE (__init_array_end = .)
 
-.fini_array     0x08003dec        0x4
-                0x08003dec                PROVIDE (__fini_array_start = .)
+.fini_array     0x080064f0        0x4
+                0x080064f0                PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x08003dec        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
-                0x08003df0                PROVIDE (__fini_array_end = .)
-                0x08003df0                _sidata = LOADADDR (.data)
+ .fini_array    0x080064f0        0x4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
+                0x080064f4                PROVIDE (__fini_array_end = .)
+                0x080064f4                _sidata = LOADADDR (.data)
 
-.data           0x20000000      0x42c load address 0x08003df0
+.data           0x20000000      0x42c load address 0x080064f4
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                _sdata = .
  *(.data)
@@ -1499,43 +1664,45 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
                 0x2000042c                . = ALIGN (0x4)
                 0x2000042c                _edata = .
 
-.igot.plt       0x2000042c        0x0 load address 0x0800421c
+.igot.plt       0x2000042c        0x0 load address 0x08006920
  .igot.plt      0x2000042c        0x0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
                 0x2000042c                . = ALIGN (0x4)
 
-.bss            0x2000042c       0x38 load address 0x0800421c
+.bss            0x2000042c       0x44 load address 0x08006920
                 0x2000042c                _sbss = .
                 0x2000042c                __bss_start__ = _sbss
  *(.bss)
  .bss           0x2000042c       0x1c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtbegin.o
  .bss           0x20000448        0x4 ./objects/tremo_delay.o
- .bss           0x2000044c        0x8 ./objects/i2c.o
- .bss           0x20000454        0xc ./objects/debug.o
+ .bss           0x2000044c        0xc ./objects/cardreader.o
+                0x2000044c                uid
+ .bss           0x20000458        0x8 ./objects/i2c.o
+ .bss           0x20000460        0xc ./objects/debug.o
  *(.bss*)
  .bss.__lock___atexit_recursive_mutex
-                0x20000460        0x1 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
-                0x20000460                __lock___atexit_recursive_mutex
+                0x2000046c        0x1 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
+                0x2000046c                __lock___atexit_recursive_mutex
  *(COMMON)
-                0x20000464                . = ALIGN (0x4)
- *fill*         0x20000461        0x3 
-                0x20000464                _ebss = .
-                0x20000464                __bss_end__ = _ebss
+                0x20000470                . = ALIGN (0x4)
+ *fill*         0x2000046d        0x3 
+                0x20000470                _ebss = .
+                0x20000470                __bss_end__ = _ebss
 
-.heap           0x20000464        0x0 load address 0x0800421c
-                0x20000464                . = ALIGN (0x4)
-                0x20000464                _heap_bottom = .
-                0x20000464                end = _heap_bottom
-                0x20000464                _end = end
-                0x20000464                __end = end
-                0x20000464                . = (. + _HEAP_SIZE)
-                0x20000464                _heap_top = .
+.heap           0x20000470        0x0 load address 0x08006920
+                0x20000470                . = ALIGN (0x4)
+                0x20000470                _heap_bottom = .
+                0x20000470                end = _heap_bottom
+                0x20000470                _end = end
+                0x20000470                __end = end
+                0x20000470                . = (. + _HEAP_SIZE)
+                0x20000470                _heap_top = .
 
-.stack          0x20000464     0x1000 load address 0x0800421c
-                0x20000464                . = ALIGN (0x4)
-                0x20000464                _stack_bottom = .
-                0x20001464                . = (. + _STACK_SIZE)
- *fill*         0x20000464     0x1000 
-                0x20001464                _stack_top = .
+.stack          0x20000470     0x1000 load address 0x08006920
+                0x20000470                . = ALIGN (0x4)
+                0x20000470                _stack_bottom = .
+                0x20001470                . = (. + _STACK_SIZE)
+ *fill*         0x20000470     0x1000 
+                0x20001470                _stack_top = .
 
 /DISCARD/
  libc.a(*)
@@ -1570,50 +1737,52 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .ARM.attributes
                 0x00000201       0x32 ./objects/tremo_it.o
  .ARM.attributes
-                0x00000233       0x32 ./objects/device.o
+                0x00000233       0x32 ./objects/cardreader.o
  .ARM.attributes
-                0x00000265       0x32 ./objects/i2c.o
+                0x00000265       0x32 ./objects/device.o
  .ARM.attributes
-                0x00000297       0x32 ./objects/debug.o
+                0x00000297       0x32 ./objects/i2c.o
  .ARM.attributes
-                0x000002c9       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_addsubdf3.o)
+                0x000002c9       0x32 ./objects/debug.o
  .ARM.attributes
-                0x000002e7       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_muldivdf3.o)
+                0x000002fb       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_addsubdf3.o)
  .ARM.attributes
-                0x00000305       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_cmpdf2.o)
+                0x00000319       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_muldivdf3.o)
  .ARM.attributes
-                0x00000323       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixdfsi.o)
+                0x00000337       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_cmpdf2.o)
  .ARM.attributes
-                0x00000341       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixunsdfsi.o)
+                0x00000355       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixdfsi.o)
  .ARM.attributes
-                0x0000035f       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_aeabi_uldivmod.o)
+                0x00000373       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixunsdfsi.o)
  .ARM.attributes
-                0x0000037d       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_udivmoddi4.o)
+                0x00000391       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_aeabi_uldivmod.o)
  .ARM.attributes
-                0x000003ab       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_dvmd_tls.o)
+                0x000003af       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_udivmoddi4.o)
  .ARM.attributes
-                0x000003c9       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-impure.o)
+                0x000003dd       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_dvmd_tls.o)
  .ARM.attributes
-                0x000003f7       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
+                0x000003fb       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-impure.o)
  .ARM.attributes
-                0x00000425       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
+                0x00000429       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
  .ARM.attributes
-                0x00000453       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-atexit.o)
+                0x00000457       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
  .ARM.attributes
-                0x00000481       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-fini.o)
+                0x00000485       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-atexit.o)
  .ARM.attributes
-                0x000004af       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
+                0x000004b3       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-fini.o)
  .ARM.attributes
-                0x000004dd       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__atexit.o)
+                0x000004e1       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
  .ARM.attributes
-                0x0000050b       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtn.o
+                0x0000050f       0x2e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__atexit.o)
+ .ARM.attributes
+                0x0000053d       0x1e c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/crtn.o
 OUTPUT(./Objects/LoraCardReader.elf elf32-littlearm)
 LOAD linker stubs
 LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a
 LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libm.a
 LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a
 
-.debug_info     0x00000000     0x58c2
+.debug_info     0x00000000     0x74a7
  .debug_info    0x00000000      0x7b5 ./objects/system_cm4.o
  .debug_info    0x000007b5       0x22 ./objects/startup_cm4.o
  .debug_info    0x000007d7      0xe86 ./objects/printf-stdarg.o
@@ -1622,13 +1791,14 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_info    0x00002502      0x9b5 ./objects/tremo_i2c.o
  .debug_info    0x00002eb7     0x10a4 ./objects/tremo_rcc.o
  .debug_info    0x00003f5b      0xa5e ./objects/tremo_uart.o
- .debug_info    0x000049b9       0x99 ./objects/main.o
- .debug_info    0x00004a52       0xf8 ./objects/tremo_it.o
- .debug_info    0x00004b4a       0xa6 ./objects/device.o
- .debug_info    0x00004bf0      0x6c1 ./objects/i2c.o
- .debug_info    0x000052b1      0x611 ./objects/debug.o
+ .debug_info    0x000049b9      0x29f ./objects/main.o
+ .debug_info    0x00004c58       0xf8 ./objects/tremo_it.o
+ .debug_info    0x00004d50     0x1944 ./objects/cardreader.o
+ .debug_info    0x00006694       0xa6 ./objects/device.o
+ .debug_info    0x0000673a      0x75c ./objects/i2c.o
+ .debug_info    0x00006e96      0x611 ./objects/debug.o
 
-.debug_abbrev   0x00000000     0x11a5
+.debug_abbrev   0x00000000     0x1580
  .debug_abbrev  0x00000000      0x182 ./objects/system_cm4.o
  .debug_abbrev  0x00000182       0x12 ./objects/startup_cm4.o
  .debug_abbrev  0x00000194      0x262 ./objects/printf-stdarg.o
@@ -1637,13 +1807,14 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_abbrev  0x00000743      0x206 ./objects/tremo_i2c.o
  .debug_abbrev  0x00000949      0x228 ./objects/tremo_rcc.o
  .debug_abbrev  0x00000b71      0x218 ./objects/tremo_uart.o
- .debug_abbrev  0x00000d89       0x48 ./objects/main.o
- .debug_abbrev  0x00000dd1       0x48 ./objects/tremo_it.o
- .debug_abbrev  0x00000e19       0x5e ./objects/device.o
- .debug_abbrev  0x00000e77      0x1f8 ./objects/i2c.o
- .debug_abbrev  0x0000106f      0x136 ./objects/debug.o
+ .debug_abbrev  0x00000d89      0x119 ./objects/main.o
+ .debug_abbrev  0x00000ea2       0x48 ./objects/tremo_it.o
+ .debug_abbrev  0x00000eea      0x2f9 ./objects/cardreader.o
+ .debug_abbrev  0x000011e3       0x5e ./objects/device.o
+ .debug_abbrev  0x00001241      0x209 ./objects/i2c.o
+ .debug_abbrev  0x0000144a      0x136 ./objects/debug.o
 
-.debug_loc      0x00000000     0x2a72
+.debug_loc      0x00000000     0x39cc
  .debug_loc     0x00000000       0xd8 ./objects/system_cm4.o
  .debug_loc     0x000000d8      0x5d2 ./objects/printf-stdarg.o
  .debug_loc     0x000006aa      0x1a8 ./objects/tremo_delay.o
@@ -1651,13 +1822,14 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_loc     0x00000c66      0x604 ./objects/tremo_i2c.o
  .debug_loc     0x0000126a      0xe2c ./objects/tremo_rcc.o
  .debug_loc     0x00002096      0x5e0 ./objects/tremo_uart.o
- .debug_loc     0x00002676       0x2c ./objects/main.o
- .debug_loc     0x000026a2      0x204 ./objects/tremo_it.o
- .debug_loc     0x000028a6       0x2c ./objects/device.o
- .debug_loc     0x000028d2      0x174 ./objects/i2c.o
- .debug_loc     0x00002a46       0x2c ./objects/debug.o
+ .debug_loc     0x00002676       0xd4 ./objects/main.o
+ .debug_loc     0x0000274a      0x204 ./objects/tremo_it.o
+ .debug_loc     0x0000294e      0xe36 ./objects/cardreader.o
+ .debug_loc     0x00003784       0x2c ./objects/device.o
+ .debug_loc     0x000037b0      0x1f0 ./objects/i2c.o
+ .debug_loc     0x000039a0       0x2c ./objects/debug.o
 
-.debug_aranges  0x00000000      0x570
+.debug_aranges  0x00000000      0x728
  .debug_aranges
                 0x00000000       0x30 ./objects/system_cm4.o
  .debug_aranges
@@ -1675,17 +1847,19 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_aranges
                 0x000003c8       0xa0 ./objects/tremo_uart.o
  .debug_aranges
-                0x00000468       0x20 ./objects/main.o
+                0x00000468       0x38 ./objects/main.o
  .debug_aranges
-                0x00000488       0x60 ./objects/tremo_it.o
+                0x000004a0       0x60 ./objects/tremo_it.o
  .debug_aranges
-                0x000004e8       0x20 ./objects/device.o
+                0x00000500      0x190 ./objects/cardreader.o
  .debug_aranges
-                0x00000508       0x48 ./objects/i2c.o
+                0x00000690       0x20 ./objects/device.o
  .debug_aranges
-                0x00000550       0x20 ./objects/debug.o
+                0x000006b0       0x58 ./objects/i2c.o
+ .debug_aranges
+                0x00000708       0x20 ./objects/debug.o
 
-.debug_ranges   0x00000000      0x4a8
+.debug_ranges   0x00000000      0x650
  .debug_ranges  0x00000000       0x20 ./objects/system_cm4.o
  .debug_ranges  0x00000020       0x20 ./objects/startup_cm4.o
  .debug_ranges  0x00000040       0x90 ./objects/printf-stdarg.o
@@ -1694,13 +1868,14 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_ranges  0x00000168       0x90 ./objects/tremo_i2c.o
  .debug_ranges  0x000001f8      0x168 ./objects/tremo_rcc.o
  .debug_ranges  0x00000360       0x90 ./objects/tremo_uart.o
- .debug_ranges  0x000003f0       0x10 ./objects/main.o
- .debug_ranges  0x00000400       0x50 ./objects/tremo_it.o
- .debug_ranges  0x00000450       0x10 ./objects/device.o
- .debug_ranges  0x00000460       0x38 ./objects/i2c.o
- .debug_ranges  0x00000498       0x10 ./objects/debug.o
+ .debug_ranges  0x000003f0       0x28 ./objects/main.o
+ .debug_ranges  0x00000418       0x50 ./objects/tremo_it.o
+ .debug_ranges  0x00000468      0x180 ./objects/cardreader.o
+ .debug_ranges  0x000005e8       0x10 ./objects/device.o
+ .debug_ranges  0x000005f8       0x48 ./objects/i2c.o
+ .debug_ranges  0x00000640       0x10 ./objects/debug.o
 
-.debug_line     0x00000000     0x3950
+.debug_line     0x00000000     0x4db0
  .debug_line    0x00000000      0x20b ./objects/system_cm4.o
  .debug_line    0x0000020b       0x82 ./objects/startup_cm4.o
  .debug_line    0x0000028d      0xd27 ./objects/printf-stdarg.o
@@ -1709,39 +1884,42 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_line    0x00001921      0x505 ./objects/tremo_i2c.o
  .debug_line    0x00001e26     0x1008 ./objects/tremo_rcc.o
  .debug_line    0x00002e2e      0x52a ./objects/tremo_uart.o
- .debug_line    0x00003358       0x6e ./objects/main.o
- .debug_line    0x000033c6      0x117 ./objects/tremo_it.o
- .debug_line    0x000034dd       0x4f ./objects/device.o
- .debug_line    0x0000352c      0x2af ./objects/i2c.o
- .debug_line    0x000037db      0x175 ./objects/debug.o
+ .debug_line    0x00003358      0x1b8 ./objects/main.o
+ .debug_line    0x00003510      0x117 ./objects/tremo_it.o
+ .debug_line    0x00003627     0x12d2 ./objects/cardreader.o
+ .debug_line    0x000048f9       0x4f ./objects/device.o
+ .debug_line    0x00004948      0x2f3 ./objects/i2c.o
+ .debug_line    0x00004c3b      0x175 ./objects/debug.o
 
-.debug_str      0x00000000     0x2ad7
- .debug_str     0x00000000      0x5e2 ./objects/system_cm4.o
-                                0x64d (size before relaxing)
- .debug_str     0x000005e2       0x35 ./objects/startup_cm4.o
-                                 0x8b (size before relaxing)
- .debug_str     0x00000617      0x20a ./objects/printf-stdarg.o
-                                0x45f (size before relaxing)
- .debug_str     0x00000821       0xdf ./objects/tremo_delay.o
-                                0x5f8 (size before relaxing)
- .debug_str     0x00000900      0x683 ./objects/tremo_gpio.o
-                                0x8c2 (size before relaxing)
- .debug_str     0x00000f83      0x54b ./objects/tremo_i2c.o
-                                0xb40 (size before relaxing)
- .debug_str     0x000014ce      0xf26 ./objects/tremo_rcc.o
-                               0x1560 (size before relaxing)
- .debug_str     0x000023f4      0x4f7 ./objects/tremo_uart.o
-                                0xb41 (size before relaxing)
- .debug_str     0x000028eb       0x3a ./objects/main.o
-                                0x242 (size before relaxing)
- .debug_str     0x00002925       0xc7 ./objects/tremo_it.o
-                                0x240 (size before relaxing)
- .debug_str     0x000029ec       0x32 ./objects/device.o
-                                0x23a (size before relaxing)
- .debug_str     0x00002a1e       0x9a ./objects/i2c.o
-                                0x893 (size before relaxing)
- .debug_str     0x00002ab8       0x1f ./objects/debug.o
-                                0x7eb (size before relaxing)
+.debug_str      0x00000000     0x3715
+ .debug_str     0x00000000      0x5dd ./objects/system_cm4.o
+                                0x648 (size before relaxing)
+ .debug_str     0x000005dd       0x35 ./objects/startup_cm4.o
+                                 0x86 (size before relaxing)
+ .debug_str     0x00000612      0x20a ./objects/printf-stdarg.o
+                                0x45a (size before relaxing)
+ .debug_str     0x0000081c       0xdf ./objects/tremo_delay.o
+                                0x5f3 (size before relaxing)
+ .debug_str     0x000008fb      0x683 ./objects/tremo_gpio.o
+                                0x8bd (size before relaxing)
+ .debug_str     0x00000f7e      0x54b ./objects/tremo_i2c.o
+                                0xb3b (size before relaxing)
+ .debug_str     0x000014c9      0xf26 ./objects/tremo_rcc.o
+                               0x155b (size before relaxing)
+ .debug_str     0x000023ef      0x4f7 ./objects/tremo_uart.o
+                                0xb3c (size before relaxing)
+ .debug_str     0x000028e6      0x294 ./objects/main.o
+                                0x4c1 (size before relaxing)
+ .debug_str     0x00002b7a       0xc7 ./objects/tremo_it.o
+                                0x23b (size before relaxing)
+ .debug_str     0x00002c41      0x9da ./objects/cardreader.o
+                                0xec7 (size before relaxing)
+ .debug_str     0x0000361b       0x32 ./objects/device.o
+                                0x235 (size before relaxing)
+ .debug_str     0x0000364d       0xa9 ./objects/i2c.o
+                                0x979 (size before relaxing)
+ .debug_str     0x000036f6       0x1f ./objects/debug.o
+                                0x7e6 (size before relaxing)
 
 .comment        0x00000000       0x49
  .comment       0x00000000       0x49 ./objects/system_cm4.o
@@ -1754,11 +1932,12 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .comment       0x00000049       0x4a ./objects/tremo_uart.o
  .comment       0x00000049       0x4a ./objects/main.o
  .comment       0x00000049       0x4a ./objects/tremo_it.o
+ .comment       0x00000049       0x4a ./objects/cardreader.o
  .comment       0x00000049       0x4a ./objects/device.o
  .comment       0x00000049       0x4a ./objects/i2c.o
  .comment       0x00000049       0x4a ./objects/debug.o
 
-.debug_frame    0x00000000     0x1864
+.debug_frame    0x00000000     0x1fc0
  .debug_frame   0x00000000       0x78 ./objects/system_cm4.o
  .debug_frame   0x00000078      0x2fc ./objects/printf-stdarg.o
  .debug_frame   0x00000374       0xcc ./objects/tremo_delay.o
@@ -1766,21 +1945,22 @@ LOAD c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.
  .debug_frame   0x00000620      0x2b0 ./objects/tremo_i2c.o
  .debug_frame   0x000008d0      0x664 ./objects/tremo_rcc.o
  .debug_frame   0x00000f34      0x2a4 ./objects/tremo_uart.o
- .debug_frame   0x000011d8       0x2c ./objects/main.o
- .debug_frame   0x00001204      0x110 ./objects/tremo_it.o
- .debug_frame   0x00001314       0x2c ./objects/device.o
- .debug_frame   0x00001340       0xd0 ./objects/i2c.o
- .debug_frame   0x00001410       0x2c ./objects/debug.o
- .debug_frame   0x0000143c       0xac c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_addsubdf3.o)
- .debug_frame   0x000014e8       0x50 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_muldivdf3.o)
- .debug_frame   0x00001538       0xc4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_cmpdf2.o)
- .debug_frame   0x000015fc       0x24 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixdfsi.o)
- .debug_frame   0x00001620       0x24 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixunsdfsi.o)
- .debug_frame   0x00001644       0x2c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x00001670       0x34 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_udivmoddi4.o)
- .debug_frame   0x000016a4       0x2c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
- .debug_frame   0x000016d0       0x5c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
- .debug_frame   0x0000172c       0x20 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-atexit.o)
- .debug_frame   0x0000174c       0x34 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-fini.o)
- .debug_frame   0x00001780       0xb0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
- .debug_frame   0x00001830       0x34 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__atexit.o)
+ .debug_frame   0x000011d8       0x88 ./objects/main.o
+ .debug_frame   0x00001260      0x110 ./objects/tremo_it.o
+ .debug_frame   0x00001370      0x6c0 ./objects/cardreader.o
+ .debug_frame   0x00001a30       0x2c ./objects/device.o
+ .debug_frame   0x00001a5c      0x110 ./objects/i2c.o
+ .debug_frame   0x00001b6c       0x2c ./objects/debug.o
+ .debug_frame   0x00001b98       0xac c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_addsubdf3.o)
+ .debug_frame   0x00001c44       0x50 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_muldivdf3.o)
+ .debug_frame   0x00001c94       0xc4 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_cmpdf2.o)
+ .debug_frame   0x00001d58       0x24 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixdfsi.o)
+ .debug_frame   0x00001d7c       0x24 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_arm_fixunsdfsi.o)
+ .debug_frame   0x00001da0       0x2c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x00001dcc       0x34 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp\libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x00001e00       0x2c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-init.o)
+ .debug_frame   0x00001e2c       0x5c c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__call_atexit.o)
+ .debug_frame   0x00001e88       0x20 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-atexit.o)
+ .debug_frame   0x00001ea8       0x34 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-fini.o)
+ .debug_frame   0x00001edc       0xb0 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-lock.o)
+ .debug_frame   0x00001f8c       0x34 c:/gnu arm embedded toolchain/10 2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libc.a(lib_a-__atexit.o)

@@ -13,5 +13,8 @@ extern void device_i2c_begin_read(uint8_t addr);
 extern uint8_t device_i2c_read();
 extern bool device_i2c_read_available();
 extern void device_i2c_stop_read();
+extern void device_i2c_stop_read();
+extern void delay(uint32_t nms);
+extern void cr_reset();
 
 #endif

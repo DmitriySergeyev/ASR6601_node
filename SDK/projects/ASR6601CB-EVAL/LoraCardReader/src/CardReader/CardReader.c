@@ -229,8 +229,11 @@ void PCD_Init() {
 	else { // Perform a soft reset
 		PCD_Reset();
 	}
-#endif
-
+#else
+	cr_reset();
+	delay(50);
+	PCD_Reset();
+#endif	
 	// When communicating with a PICC we need a timeout if something goes wrong.
 	// f_timer = 13.56 MHz / (2*TPreScaler+1) where TPreScaler = [TPrescaler_Hi:TPrescaler_Lo].
 	// TPrescaler_Hi are the four low bits in TModeReg. TPrescaler_Lo is TPrescalerReg.

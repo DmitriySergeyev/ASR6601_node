@@ -1,4 +1,5 @@
 #include "i2c.h"
+#include "tremo_delay.h"
 
 static i2c_config_t config;
 
@@ -16,6 +17,8 @@ void device_i2c_init(void)
     i2c_config_init(&config);
     i2c_init(I2C0, &config);
     i2c_cmd(I2C0, true);	
+	
+		delay_init();
 }
 
 size_t device_i2c_write(uint8_t addr, size_t count, uint8_t *data)
@@ -71,7 +74,18 @@ bool device_i2c_read_available()
 
 void device_i2c_stop_read()
 {
-    i2c_master_send_stop(I2C0);
+		i2c_master_send_stop(I2C0);
+}
+
+void delay(uint32_t nms)
+{
+    delay_ms(nms);
+}
+
+void cr_reset()
+{  
+		gpio_init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUTPUT_PP_HIGH);
+		gpio_write(GPIOA, GPIO_PIN_2, GPIO_LEVEL_HIGH);
 }
 
 
