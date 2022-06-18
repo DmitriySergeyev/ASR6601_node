@@ -28,6 +28,7 @@ static void Start()
 
 static void Loop()
 {
+	printf("Cycle\r\n");
 	// Look for new cards
 	if ( ! PICC_IsNewCardPresent()) {
 		return;
@@ -47,12 +48,13 @@ int main(void)
     /* Add your application code here */
 		device_init();
 		printf("This is Card reader\r\n");
+		//cr_pin_test();
 		Start();
     /* Infinite loop */
     while (1) 
 		{
 			Loop();
-			
+			delay_ms(5000);
 		}
 }
 

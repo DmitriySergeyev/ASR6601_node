@@ -104,7 +104,7 @@ uint8_t PCD_ReadRegister(	uint8_t reg	///< The register to read from. One of the
 	uint8_t value = reg;
 	//digitalWrite(_chipSelectPin, LOW);			// Select slave
 	device_i2c_write(RFID_I2C_ADDR, 1, &value);								
-	device_i2c_begin_read(RFID_I2C_ADDR);
+	device_i2c_begin_read(RFID_I2C_ADDR, 1);
 	value = device_i2c_read(); 								
 	device_i2c_stop_read();
 	return value;
@@ -125,7 +125,7 @@ void PCD_ReadRegisterEx(	uint8_t reg,		///< The register to read from. One of th
 	uint8_t address = reg;
 	uint8_t index = 0;							// Index in values array.
 	device_i2c_write(RFID_I2C_ADDR, 1, &address);	
-	device_i2c_begin_read(RFID_I2C_ADDR);
+	device_i2c_begin_read(RFID_I2C_ADDR, count);
 	while (device_i2c_read_available() == true) 
 		{
 		if (index == 0 && rxAlign) {		// Only update bit positions rxAlign..7 in values[0]
