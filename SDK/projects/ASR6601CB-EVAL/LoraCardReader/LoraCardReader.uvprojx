@@ -415,12 +415,12 @@
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\projects\ASR6601CB-EVAL\template\src\main.c</FilePath>
+              <FilePath>.\src\main.c</FilePath>
             </File>
             <File>
               <FileName>tremo_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\projects\ASR6601CB-EVAL\template\src\tremo_it.c</FilePath>
+              <FilePath>.\src\tremo_it.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -490,26 +490,6 @@
           <GroupName>device</GroupName>
           <Files>
             <File>
-              <FileName>device.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\device\device.c</FilePath>
-            </File>
-            <File>
-              <FileName>device.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\device\device.h</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\device\i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\device\i2c.h</FilePath>
-            </File>
-            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\device\debug.c</FilePath>
@@ -518,6 +498,16 @@
               <FileName>debug.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\device\debug.h</FilePath>
+            </File>
+            <File>
+              <FileName>HwCardReader.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\device\HwCardReader.c</FilePath>
+            </File>
+            <File>
+              <FileName>HwCardReader.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\device\HwCardReader.h</FilePath>
             </File>
           </Files>
         </Group>
