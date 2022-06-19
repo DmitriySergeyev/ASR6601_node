@@ -7,6 +7,6 @@
 #include "tremo_gpio.h"
 #include "tremo_rcc.h"
 
-extern void device_debug_init(void);
+extern void debug_init(void);
 
 #endif

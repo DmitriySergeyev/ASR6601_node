@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "device.h"
 #include "CardReader.h"
 
 void ShowReaderDetails() {

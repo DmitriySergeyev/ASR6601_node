@@ -1,6 +1,5 @@
-//
 #include "CardReader.h"
-#include "i2c.h"
+#include "HwCardReader.h"
 
 
 static uint8_t MIFARE_TwoStepHelper(uint8_t command, uint8_t blockAddr, long data);
@@ -74,7 +73,7 @@ void PCD_WriteRegister(	uint8_t reg,		///< The register to write to. One of the 
 
 	data[0] = reg; 
 	data[1] = value;									
-	device_i2c_write(RFID_I2C_ADDR, 2, data);
+	hwCR_Write(RFID_I2C_ADDR, 2, data);
 } // End PCD_WriteRegister()
 
 /**
@@ -92,7 +91,7 @@ void PCD_WriteRegisterEx(	uint8_t reg,		///< The register to write to. One of th
 	{
 		data[1 + index] = values[index];
 	}									
-	device_i2c_write(RFID_I2C_ADDR, count + 1, data);								
+	hwCR_Write(RFID_I2C_ADDR, count + 1, data);								
 } // End PCD_WriteRegister()
 
 /**
@@ -103,10 +102,10 @@ uint8_t PCD_ReadRegister(	uint8_t reg	///< The register to read from. One of the
 								) {
 	uint8_t value = reg;
 	//digitalWrite(_chipSelectPin, LOW);			// Select slave
-	device_i2c_write(RFID_I2C_ADDR, 1, &value);								
-	device_i2c_begin_read(RFID_I2C_ADDR, 1);
-	value = device_i2c_read(); 								
-	device_i2c_stop_read();
+	hwCR_Write(RFID_I2C_ADDR, 1, &value);								
+	hwCR_ReadBegin(RFID_I2C_ADDR, 1);
+	value = hwCR_Read(); 								
+	hwCR_ReadStop();
 	return value;
 } // End PCD_ReadRegister()
 
@@ -124,9 +123,9 @@ void PCD_ReadRegisterEx(	uint8_t reg,		///< The register to read from. One of th
 	}
 	uint8_t address = reg;
 	uint8_t index = 0;							// Index in values array.
-	device_i2c_write(RFID_I2C_ADDR, 1, &address);	
-	device_i2c_begin_read(RFID_I2C_ADDR, count);
-	while (device_i2c_read_available() == true) 
+	hwCR_Write(RFID_I2C_ADDR, 1, &address);	
+	hwCR_ReadBegin(RFID_I2C_ADDR, count);
+	while (hwCR_ReadAvailable() == true) 
 		{
 		if (index == 0 && rxAlign) {		// Only update bit positions rxAlign..7 in values[0]
 			// Create bit mask for bit positions rxAlign..7
@@ -135,16 +134,16 @@ void PCD_ReadRegisterEx(	uint8_t reg,		///< The register to read from. One of th
 				mask |= (1 << i);
 			}
 			// Read value and tell that we want to read the same address again.
-			uint8_t value = device_i2c_read();
+			uint8_t value = hwCR_Read();
 			// Apply mask to both current value of values[0] and the new data in value.
 			values[0] = (values[index] & ~mask) | (value & mask);
 		}
 		else { // Normal case
-			values[index] = device_i2c_read();
+			values[index] = hwCR_Read();
 		}
 		index++;
 	}
-	device_i2c_stop_read();	
+	hwCR_ReadStop();	
 } // End PCD_ReadRegister()
 
 /**
@@ -217,23 +216,8 @@ void PCD_Init() {
 	// Set the chipSelectPin as digital output, do not select the slave yet
 
 	// Set the resetPowerDownPin as digital output, do not reset or power down.
-#if 0 // TODO: Реализовать в платформе
-	pinMode(_resetPowerDownPin, OUTPUT);
-
-
-	if (digitalRead(_resetPowerDownPin) == LOW) {	//The MFRC522 chip is in power down mode.
-		digitalWrite(_resetPowerDownPin, HIGH);		// Exit power down mode. This triggers a hard reset.
-		// Section 8.8.2 in the datasheet says the oscillator start-up time is the start up time of the crystal + 37,74?s. Let us be generous: 50ms.
-		delay(50);
-	}
-	else { // Perform a soft reset
-		PCD_Reset();
-	}
-#else
-	cr_reset();
-	delay(50);
+	hwCR_Reset();
 	PCD_Reset();
-#endif	
 	// When communicating with a PICC we need a timeout if something goes wrong.
 	// f_timer = 13.56 MHz / (2*TPreScaler+1) where TPreScaler = [TPrescaler_Hi:TPrescaler_Lo].
 	// TPrescaler_Hi are the four low bits in TModeReg. TPrescaler_Lo is TPrescalerReg.
@@ -255,7 +239,7 @@ void PCD_Reset() {
 	// The datasheet does not mention how long the SoftRest command takes to complete.
 	// But the MFRC522 might have been in soft power-down mode (triggered by bit 4 of CommandReg)
 	// Section 8.8.2 in the datasheet says the oscillator start-up time is the start up time of the crystal + 37,74?s. Let us be generous: 50ms.
-	delay(50);
+	delay_ms(50);
 	// Wait for the PowerDown bit in CommandReg to be cleared
 	while (PCD_ReadRegister(CommandReg) & (1<<4)) {
 		// PCD still restarting - unlikely after waiting 50ms, but better safe than sorry.
