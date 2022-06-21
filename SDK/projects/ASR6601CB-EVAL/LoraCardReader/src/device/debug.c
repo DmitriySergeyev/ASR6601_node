@@ -4,8 +4,6 @@ static uart_config_t uart_config;
 
 void debug_init(void)
 {
-    rcc_enable_peripheral_clk(RCC_PERIPHERAL_UART0, true);
-    rcc_enable_peripheral_clk(RCC_PERIPHERAL_GPIOB, true);	
     // uart0
     gpio_set_iomux(GPIOB, GPIO_PIN_0, 1);
     gpio_set_iomux(GPIOB, GPIO_PIN_1, 1);

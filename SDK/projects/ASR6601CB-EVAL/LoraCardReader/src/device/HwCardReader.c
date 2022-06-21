@@ -7,10 +7,6 @@ static uint8_t dev_addr = 0;
 
 void hwCR_Init(void)
 {
-    // enable the clk
-    rcc_enable_peripheral_clk(RCC_PERIPHERAL_I2C0, true);
-    rcc_enable_peripheral_clk(RCC_PERIPHERAL_GPIOA, true);
-
     // set iomux
 	gpio_init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUTPUT_PP_HIGH);
     gpio_set_iomux(GPIOA, GPIO_PIN_14, 3);

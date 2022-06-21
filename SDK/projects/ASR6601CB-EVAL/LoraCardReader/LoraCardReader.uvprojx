@@ -511,6 +511,36 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>lib</GroupName>
+          <Files>
+            <File>
+              <FileName>libcrypto.a</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\drivers\crypto\lib\libcrypto.a</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>lora</GroupName>
+          <Files>
+            <File>
+              <FileName>rtc-board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\lora\driver\rtc-board.c</FilePath>
+            </File>
+            <File>
+              <FileName>sx1262-board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\lora\driver\sx1262-board.c</FilePath>
+            </File>
+            <File>
+              <FileName>utilities.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\lora\driver\utilities.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>
