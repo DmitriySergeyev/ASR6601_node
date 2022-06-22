@@ -3,6 +3,7 @@
 #include "CardReader.h"
 
 static bool isInit = false;
+static uint32_t CountNewCard = 0;
 
 static void ShowReaderDetails() 
 {
@@ -35,6 +36,7 @@ static void ShowReaderDetails()
 
 extern void CardReaderAppStart()
 {
+	SendBufferClear();
 	hwCR_Init();
 	PCD_Init();		// Init MFRC522
 	ShowReaderDetails();	// Show details of PCD - MFRC522 Card Reader details
@@ -44,19 +46,30 @@ extern void CardReaderAppStart()
 
 extern void CardReaderAppLoop()
 {
+	sSendInfo SendInfo;
+	
 	printf("CardReaderApp cycle\r\n");
 	// Look for new cards
 	if ( ! PICC_IsNewCardPresent()) 
 	{
 		return;
 	}
-
+	
+	CountNewCard++;
+	SendInfo.UtcDateTime = 0;
+	SendInfo.Id = CountNewCard;
+	memset(&SendInfo.CardUid, 0, sizeof(SendInfo.CardUid));
 	// Select one of the cards
 	if ( ! PICC_ReadCardSerial()) 
 	{
-		return;
+		printf("Err read card serial\r\n");
+		SendInfo.ReadResult = eCardReadErr;
 	}
-
-	// Dump debug info about the card; PICC_HaltA() is automatically called
-	PICC_DumpToSerial(&uid);	
+	else
+	{
+		SendInfo.ReadResult = eCardReadOk;
+		SendInfo.CardUid = uid;
+		PICC_DumpToSerial(&uid);	 // Dump debug info about the card; PICC_HaltA() is automatically called
+	}
+	SendBufferPut(SendInfo);
 }

@@ -653,6 +653,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\apps\LoRaWanApp.c</FilePath>
             </File>
+            <File>
+              <FileName>CardInfoSender.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\apps\CardInfoSender.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
