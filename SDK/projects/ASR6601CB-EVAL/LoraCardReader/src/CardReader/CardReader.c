@@ -1452,8 +1452,8 @@ void PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to Uid struct
 		}
 
 		if (group != 3 && (g[group] == 1 || g[group] == 6)) { // Not a sector trailer, a value block
-			long value = (long)(buffer[3]<<24) | (long)(buffer[2]<<16) | (long)(buffer[1]<<8) | (long)(buffer[0]);
-			printf(" Value=0x%08X", value);
+			uint32_t value = (uint32_t)(buffer[3]<<24) | (uint32_t)(buffer[2]<<16) | (uint32_t)(buffer[1]<<8) | (uint32_t)(buffer[0]);
+			printf(" Value=0x%08lX", value);
 			printf(" Adr=0x%02X", buffer[12]);
 		}
 		printf("\r\n");
@@ -1589,8 +1589,12 @@ bool MIFARE_OpenUidBackdoor(bool logErrors) {
  * It assumes a default KEY A of 0xFFFFFFFFFFFF.
  * Make sure to have selected the card before this function is called.
  */
-bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
+bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) 
+	{
 
+	MIFARE_Key key;
+	uint8_t status;
+	
 	// UID + BCC uint8_t can not be larger than 16 together
 	if (!newUid || !uidSize || uidSize > 15) {
 		if (logErrors) {
@@ -1600,8 +1604,8 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors) {
 	}
 
 	// Authenticate for reading
-	MIFARE_Key key = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-	uint8_t status = PCD_Authenticate(PICC_CMD_MF_AUTH_KEY_A, (uint8_t)1, &key, &uid);
+	
+	status = PCD_Authenticate(PICC_CMD_MF_AUTH_KEY_A, (uint8_t)1, &key, &uid);
 	if (status != STATUS_OK) {
 
 		if (status == STATUS_TIMEOUT) {

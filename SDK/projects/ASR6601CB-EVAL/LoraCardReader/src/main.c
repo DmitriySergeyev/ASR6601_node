@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "apps.h"
 #include "rtc-board.h"
+#include "tremo_pwr.h"
 
 static void board_init()
 {

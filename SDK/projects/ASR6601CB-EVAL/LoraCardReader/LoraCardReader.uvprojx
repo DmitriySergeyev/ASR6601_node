@@ -242,7 +242,7 @@
             <uThumb>1</uThumb>
             <VariousControls>
               <MiscControls>-Wall -O0 -ffunction-sections -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -fsingle-precision-constant -std=gnu99 -fno-builtin-printf -fno-builtin-sprintf -fno-builtin-snprintf</MiscControls>
-              <Define>CONFIG_DEBUG_UART=UART0, REGION_CN470,</Define>
+              <Define>CONFIG_DEBUG_UART=UART0, REGION_EU868</Define>
               <Undefine></Undefine>
               <IncludePath>.\inc;..\..\..\platform\CMSIS;..\..\..\platform\common;..\..\..\platform\system;..\..\..\drivers\peripheral\inc;.\src;.\src\CardReader;.\src\device;.\src\apps;..\..\..\lora\mac\region;..\..\..\lora\mac;..\..\..\lora\radio;..\..\..\lora\radio\sx126x;..\..\..\lora\system\crypto;..\..\..\lora\system;..\..\..\lora\driver;..\..\..\drivers\crypto\inc</IncludePath>
             </VariousControls>

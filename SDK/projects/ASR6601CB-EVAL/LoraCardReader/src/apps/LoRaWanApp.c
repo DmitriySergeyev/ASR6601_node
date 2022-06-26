@@ -4,6 +4,8 @@
 #include "LoRaMac.h"
 #include "Commissioning.h"
 
+#define ACTIVE_REGION LORAMAC_REGION_EU868
+
 #ifndef ACTIVE_REGION
 
 #warning "No active region defined, LORAMAC_REGION_CN470 will be used as default."
