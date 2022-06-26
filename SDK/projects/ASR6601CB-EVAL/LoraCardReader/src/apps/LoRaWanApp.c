@@ -402,12 +402,12 @@ uint8_t BoardGetBatteryLevel( void )
     return 0;
 }
 
+static LoRaMacPrimitives_t LoRaMacPrimitives;
+static LoRaMacCallback_t LoRaMacCallbacks;
+static MibRequestConfirm_t mibReq;
+
 void LoRaWanAppStart()
 {
-    LoRaMacPrimitives_t LoRaMacPrimitives;
-    LoRaMacCallback_t LoRaMacCallbacks;
-    MibRequestConfirm_t mibReq;
-
     DeviceState = DEVICE_STATE_INIT;
 
     printf("ClassA app start\r\n");	

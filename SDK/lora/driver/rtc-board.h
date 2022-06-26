@@ -29,9 +29,9 @@
 /*!
  * \brief Timer time variable definition
  */
-//#ifndef TimerTime_t
-//typedef uint64_t TimerTime_t;
-//#endif
+#ifndef TimerTime_t
+typedef uint64_t TimerTime_t;
+#endif
 
 /*!
  * \brief Initializes the RTC timer
