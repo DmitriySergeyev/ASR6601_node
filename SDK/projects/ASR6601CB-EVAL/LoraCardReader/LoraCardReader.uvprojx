@@ -241,7 +241,7 @@
             <wLevel>2</wLevel>
             <uThumb>1</uThumb>
             <VariousControls>
-              <MiscControls>-Wall -O0 -ffunction-sections -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -fsingle-precision-constant -std=gnu99 -fno-builtin-printf -fno-builtin-sprintf -fno-builtin-snprintf</MiscControls>
+              <MiscControls>-Wall -Os -ffunction-sections -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -fsingle-precision-constant -std=gnu99 -fno-builtin-printf -fno-builtin-sprintf -fno-builtin-snprintf</MiscControls>
               <Define>CONFIG_DEBUG_UART=UART0, REGION_EU868</Define>
               <Undefine></Undefine>
               <IncludePath>.\inc;..\..\..\platform\CMSIS;..\..\..\platform\common;..\..\..\platform\system;..\..\..\drivers\peripheral\inc;.\src;.\src\CardReader;.\src\device;.\src\apps;..\..\..\lora\mac\region;..\..\..\lora\mac;..\..\..\lora\radio;..\..\..\lora\radio\sx126x;..\..\..\lora\system\crypto;..\..\..\lora\system;..\..\..\lora\driver;..\..\..\drivers\crypto\inc</IncludePath>
@@ -602,59 +602,14 @@
               <FilePath>..\..\..\lora\mac\region\Region.c</FilePath>
             </File>
             <File>
-              <FileName>RegionAS923.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionAS923.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAU915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionAU915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN470.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionCN470.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN779.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionCN779.c</FilePath>
-            </File>
-            <File>
               <FileName>RegionCommon.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\lora\mac\region\RegionCommon.c</FilePath>
             </File>
             <File>
-              <FileName>RegionEU433.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionEU433.c</FilePath>
-            </File>
-            <File>
               <FileName>RegionEU868.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\lora\mac\region\RegionEU868.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionIN865.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionIN865.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionKR920.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionKR920.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionUS915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915-Hybrid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\lora\mac\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>

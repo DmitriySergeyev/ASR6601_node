@@ -40,7 +40,7 @@
  *
  * \remark Please note that when ADR is enabled the end-device should be static
  */
-#define LORAWAN_ADR_ON                              1
+#define LORAWAN_ADR_ON                              0
 
 /*!
  * LoRaWAN application port
@@ -518,7 +518,7 @@ extern void LoRaWanAppLoop()
 				case DEVICE_STATE_SLEEP:
 				{
 						// Wake up through events
-						TimerLowPowerHandler( );
+						//TimerLowPowerHandler( );
 						
 						// Process Radio IRQ
 						Radio.IrqProcess( );

@@ -48,7 +48,7 @@ extern void CardReaderAppLoop()
 {
 	sSendInfo SendInfo;
 	
-	printf("CardReaderApp cycle\r\n");
+	//printf("CardReaderApp cycle\r\n");
 	// Look for new cards
 	if ( ! PICC_IsNewCardPresent()) 
 	{

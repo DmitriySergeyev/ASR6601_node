@@ -104,7 +104,7 @@ void PWR_IRQHandler()
  * @param  None
  * @retval None
  */
-/*void LORA_IRQHandler()
+void LORA_IRQHandler()
 {
     RadioOnDioIrq();
 }
@@ -112,4 +112,4 @@ void PWR_IRQHandler()
 void RTC_IRQHandler(void)
 {
     RtcOnIrq();
-}*/
+}

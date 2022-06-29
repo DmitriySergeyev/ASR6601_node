@@ -92,7 +92,7 @@ void hwCR_Reset()
 { 
 	gpio_write(GPIOA, GPIO_PIN_2, GPIO_LEVEL_LOW); 
 	delay_ms(50);
-	gpio_write(GPIOA, GPIO_PIN_2, GPIO_LEVEL_LOW);
+	gpio_write(GPIOA, GPIO_PIN_2, GPIO_LEVEL_HIGH);
 	delay_ms(50);
 }
 
