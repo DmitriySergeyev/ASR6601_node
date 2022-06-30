@@ -21,7 +21,7 @@ static void board_init()
 		rcc_enable_peripheral_clk(RCC_PERIPHERAL_I2C0, true);
 
     delay_ms(100);
-    //pwr_xo32k_lpm_cmd(true);
+    pwr_xo32k_lpm_cmd(false); // Запрещаем переходить в Sleep
 		debug_init();
 		printf("LoraWan card reader started\r\n");
 
@@ -35,7 +35,7 @@ int main(void)
 	LoRaWanAppStart();
   while (1) 
 	{
-		//printf("Cycle\r\n");
+		printf("Cycle\r\n");
 		CardReaderAppLoop();
 		LoRaWanAppLoop();
 		delay_ms(100);

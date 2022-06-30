@@ -102,9 +102,15 @@ uint8_t PCD_ReadRegister(	uint8_t reg	///< The register to read from. One of the
 								) {
 	uint8_t value = reg;
 	//digitalWrite(_chipSelectPin, LOW);			// Select slave
-	hwCR_Write(RFID_I2C_ADDR, 1, &value);								
+	if (hwCR_Write(RFID_I2C_ADDR, 1, &value) != true)
+	{
+		return 0;
+	}		
 	hwCR_ReadBegin(RFID_I2C_ADDR, 1);
-	value = hwCR_Read(); 								
+	if (hwCR_Read(&value) != true)
+	{
+		return 0;
+	}		
 	hwCR_ReadStop();
 	return value;
 } // End PCD_ReadRegister()
@@ -123,23 +129,35 @@ void PCD_ReadRegisterEx(	uint8_t reg,		///< The register to read from. One of th
 	}
 	uint8_t address = reg;
 	uint8_t index = 0;							// Index in values array.
-	hwCR_Write(RFID_I2C_ADDR, 1, &address);	
+	if (hwCR_Write(RFID_I2C_ADDR, 1, &address) != true)
+	{
+		return;
+	}
 	hwCR_ReadBegin(RFID_I2C_ADDR, count);
 	while (hwCR_ReadAvailable() == true) 
 		{
-		if (index == 0 && rxAlign) {		// Only update bit positions rxAlign..7 in values[0]
+		if (index == 0 && rxAlign) 
+		{		// Only update bit positions rxAlign..7 in values[0]
 			// Create bit mask for bit positions rxAlign..7
 			uint8_t mask = 0;
 			for (uint8_t i = rxAlign; i <= 7; i++) {
 				mask |= (1 << i);
 			}
 			// Read value and tell that we want to read the same address again.
-			uint8_t value = hwCR_Read();
+			uint8_t value; 
+			if (hwCR_Read(&value) != true)
+			{
+				return;
+			}					
 			// Apply mask to both current value of values[0] and the new data in value.
 			values[0] = (values[index] & ~mask) | (value & mask);
 		}
-		else { // Normal case
-			values[index] = hwCR_Read();
+		else 
+		{ // Normal case
+			if (hwCR_Read(&values[index]) != true)
+			{
+				return;
+			}						
 		}
 		index++;
 	}
