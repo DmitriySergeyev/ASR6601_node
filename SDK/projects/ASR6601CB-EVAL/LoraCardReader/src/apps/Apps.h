@@ -2,7 +2,7 @@
 #define APPS_H_
 #include "CardReader.h"
 
-#define SEND_BUFFER_SIZE	8
+#define CARD_INFO_BUFFER_SIZE	8
 
 typedef enum
 {
@@ -16,15 +16,23 @@ typedef struct
 	uint32_t UtcDateTime;
 	uint32_t Id;
 	Uid CardUid;
-} sSendInfo;
+} sCardInfo;
 
-extern void SendBufferPut(sSendInfo SendInfo);
-extern sSendInfo SendBufferPop( );
+typedef struct
+{
+	bool isInit;
+	uint8_t ver;
+} sCardReaderInfo;
+
+extern void SendBufferPut(sCardInfo Info);
+extern sCardInfo SendBufferPop( );
 extern uint16_t SendBufferGetCount( );
 extern void SendBufferClear( );
+extern uint8_t PrepareCardInfoFrame(sCardInfo Info, uint8_t *buff);
 
 extern void CardReaderAppStart();
 extern void CardReaderAppLoop();
+extern void CardReaderGetInfo(sCardReaderInfo *Info);
 
 extern void LoRaWanAppStart();
 extern void LoRaWanAppLoop();
