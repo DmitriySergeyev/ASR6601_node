@@ -56,6 +56,7 @@ bool hwCR_Write(uint8_t addr, size_t count, uint8_t *data)
     for(size_t i = 0; i < count; i++) 
 		{
         i2c_send_data(I2C0, data[i]);
+				i2c_clear_flag_status(I2C0, I2C_FLAG_TRANS_EMPTY);
 				if (WaitFlag(I2C_FLAG_TRANS_EMPTY, 100) != true)
 				{
 					i2c_master_send_stop(I2C0);	
