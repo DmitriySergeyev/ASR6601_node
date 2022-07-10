@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "utilities.h"
 #include "LoRaMac.h"
+#include "LoRaMacTest.h"
 #include "Commissioning.h"
 #include "rtc-board.h"
 
@@ -34,7 +35,7 @@
 /*!
  * LoRaWAN confirmed messages
  */
-#define LORAWAN_CONFIRMED_MSG_ON                    true
+#define CONFIRMED_CARD_INFO_MSG_ON                  false
 
 /*!
  * LoRaWAN Adaptive Data Rate
@@ -83,7 +84,7 @@ static uint8_t TxData[LORAWAN_APP_DATA_BUFF_SIZE];
 /*!
  * Indicates if the node is sending confirmed or unconfirmed messages
  */
-static uint8_t IsTxConfirmed = LORAWAN_CONFIRMED_MSG_ON;
+static uint8_t IsTxConfirmed = false;
 
 /*!
  * Defines the application data transmission duty cycle
@@ -149,13 +150,20 @@ static void PrepareTxFrame( eDeviceSendType Type )
 		switch (Type)
 		{
 			case DEVICE_SEND_PING:
+				printf("Send ping packet\r\n");
 				TxDataSize = PreparePingFrame(TxData);
 				TxDataPort = PING_TX_PORT;
+				IsTxConfirmed = false;
 				break;
 			case DEVICE_SEND_CARD:
+				printf("Send card info packet\r\n");
 				CardInfo = SendBufferPop();
 				TxDataSize = PrepareCardInfoFrame(CardInfo, TxData);
 				TxDataPort = CARD_INFO_TX_PORT;
+				IsTxConfirmed = CONFIRMED_CARD_INFO_MSG_ON;
+				if (IsTxConfirmed == false)
+				{
+				}
 				break;	
 			default:
 				TxDataSize = 0;
@@ -498,6 +506,7 @@ extern void LoRaWanAppLoop()
 						LoRaMacPrimitives.MacMlmeIndication = MlmeIndication;
 						LoRaMacCallbacks.GetBatteryLevel = BoardGetBatteryLevel;
 						LoRaMacInitialization( &LoRaMacPrimitives, &LoRaMacCallbacks, ACTIVE_REGION );
+						LoRaMacTestSetDutyCycleOn(false);
 
 						TimerInit( &PingPacketTimer, OnTxPingPacketTimerEvent );
 

@@ -257,6 +257,7 @@ uint8_t PICC_GetType(uint8_t sak);
 	//const char *PICC_GetTypeName(uint8_t type);
 const char *PICC_GetTypeName(uint8_t type);
 void PICC_DumpToSerial(Uid *uid);
+void PICC_DumpToSerial2(Uid *uid);
 void PICC_DumpMifareClassicToSerial(Uid *uid, uint8_t piccType, MIFARE_Key *key);
 void PICC_DumpMifareClassicSectorToSerial(Uid *uid, MIFARE_Key *key, uint8_t sector);
 void PICC_DumpMifareUltralightToSerial();

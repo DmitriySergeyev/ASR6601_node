@@ -35,10 +35,8 @@ int main(void)
 	LoRaWanAppStart();
   while (1) 
 	{
-		printf("Cycle\r\n");
 		CardReaderAppLoop();
 		LoRaWanAppLoop();
-		delay_ms(100);
 	}
 }
 

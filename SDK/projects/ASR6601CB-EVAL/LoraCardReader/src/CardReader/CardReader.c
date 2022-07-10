@@ -1309,6 +1309,31 @@ void PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned from a succe
 	printf("\r\n");
 	PICC_HaltA(); // Already done if it was a MIFARE Classic PICC.
 } // End PICC_DumpToSerial()
+								
+/**
+ * Dumps debug info about the selected PICC to Serial.
+ * On success the PICC is halted after dumping the data.
+ * For MIFARE Classic the factory default key of 0xFFFFFFFFFFFF is tried.
+ */
+void PICC_DumpToSerial2(Uid *uid	///< Pointer to Uid struct returned from a successful PICC_Select().
+								) 
+{
+	uint8_t piccType = PICC_GetType(uid->sak);
+	printf("PICC type: ");
+	printf("%s\r\n", PICC_GetTypeName(piccType));
+	// UID
+	printf("Card UID:");
+	for (uint8_t i = 0; i < uid->size; i++) 
+	{
+		printf("0x%02X  ", uid->uidByte[i]);
+	}
+	printf("\r\n");
+	
+	PICC_HaltA(); // Already done if it was a MIFARE Classic PICC.
+
+	// PICC type
+	
+} // End PICC_DumpToSerial()
 
 /**
  * Dumps memory contents of a MIFARE Classic PICC.
