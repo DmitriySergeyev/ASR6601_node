@@ -35,7 +35,7 @@
 /*!
  * LoRaWAN confirmed messages
  */
-#define CONFIRMED_CARD_INFO_MSG_ON                  false
+#define CONFIRMED_CARD_INFO_MSG_ON                  true
 
 /*!
  * LoRaWAN Adaptive Data Rate
@@ -151,19 +151,16 @@ static void PrepareTxFrame( eDeviceSendType Type )
 		{
 			case DEVICE_SEND_PING:
 				printf("Send ping packet\r\n");
-				TxDataSize = PreparePingFrame(TxData);
 				TxDataPort = PING_TX_PORT;
-				IsTxConfirmed = false;
+				IsTxConfirmed = false;			
+				TxDataSize = PreparePingFrame(TxData);
 				break;
 			case DEVICE_SEND_CARD:
 				printf("Send card info packet\r\n");
-				CardInfo = SendBufferPop();
-				TxDataSize = PrepareCardInfoFrame(CardInfo, TxData);
 				TxDataPort = CARD_INFO_TX_PORT;
 				IsTxConfirmed = CONFIRMED_CARD_INFO_MSG_ON;
-				if (IsTxConfirmed == false)
-				{
-				}
+				CardInfo = SendBufferPop(CONFIRMED_CARD_INFO_MSG_ON);
+				TxDataSize = PrepareCardInfoFrame(CardInfo, TxData);
 				break;	
 			default:
 				TxDataSize = 0;
@@ -205,7 +202,7 @@ static bool SendFrame( void )
             mcpsReq.Req.Confirmed.fPort = TxDataPort;
             mcpsReq.Req.Confirmed.fBuffer = TxData;
             mcpsReq.Req.Confirmed.fBufferSize = TxDataSize;
-            mcpsReq.Req.Confirmed.NbTrials = 8;
+            mcpsReq.Req.Confirmed.NbTrials = 1;
             mcpsReq.Req.Confirmed.Datarate = LORAWAN_DEFAULT_DATARATE;
         }
     }
@@ -309,6 +306,7 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
             }
             case MCPS_CONFIRMED:
             {
+								SendBufferInc();
                 // Check Datarate
                 // Check TxPower
                 // Check AckReceived

@@ -25,7 +25,8 @@ typedef struct
 } sCardReaderInfo;
 
 extern void SendBufferPut(sCardInfo Info);
-extern sCardInfo SendBufferPop( );
+extern sCardInfo SendBufferPop(bool isNotInc);
+extern void SendBufferInc( );
 extern uint16_t SendBufferGetCount( );
 extern void SendBufferClear( );
 extern uint8_t PrepareCardInfoFrame(sCardInfo Info, uint8_t *buff);

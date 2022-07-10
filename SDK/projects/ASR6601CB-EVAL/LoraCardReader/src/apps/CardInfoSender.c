@@ -20,12 +20,28 @@ void SendBufferPut(sCardInfo Info)
     if (SendBuffer.idxIn >= CARD_INFO_BUFFER_SIZE) SendBuffer.idxIn = 0;
 }
 
-sCardInfo SendBufferPop( )
+sCardInfo SendBufferPop(bool isNotInc)
 {
 		printf("Pop packet\r\n");
-    sCardInfo retval = SendBuffer.Buff[SendBuffer.idxOut++];
-    if (SendBuffer.idxOut >= CARD_INFO_BUFFER_SIZE) SendBuffer.idxOut = 0;
+    sCardInfo retval = SendBuffer.Buff[SendBuffer.idxOut];
+		if (isNotInc == false)
+		{
+			SendBufferInc();
+		}
     return retval;
+}
+
+void SendBufferInc( )
+{
+	if (SendBufferGetCount() != 0)
+	{
+		printf("Inc packet\r\n");
+		SendBuffer.idxOut++;
+		if (SendBuffer.idxOut >= CARD_INFO_BUFFER_SIZE) 
+		{
+			SendBuffer.idxOut = 0;
+		}
+	}
 }
 
 uint16_t SendBufferGetCount()
