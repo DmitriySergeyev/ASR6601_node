@@ -11,23 +11,23 @@ static bool ShowReaderDetails()
 {
 	// Get the MFRC522 software version
 	ver = PCD_ReadRegister(VersionReg);
-	printf("MFRC522 Software Version: 0x0%2X", ver);
+	SYSLOG_D("MFRC522 Software Version: 0x0%2X", ver);
 	if (ver == 0x91)
 	{
-		printf(" = v1.0\r\n");
+		SYSLOG_I("MFRC522 = v1.0");
 	}
 	else if (ver == 0x92)
 	{
-		printf(" = v2.0\r\n");
+		SYSLOG_I("MFRC522 = v2.0");
 	}
 	else
 	{
-		printf(" (unknown)\r\n");
+		SYSLOG_I("MFRC522 version unknown");
 	}
 	// When 0x00 or 0xFF is returned, communication probably failed
 	if ((ver == 0x00) || (ver == 0xFF)) 
 	{
-		printf("WARNING: Communication failure, is the MFRC522 properly connected?\r\n");
+		SYSLOG_E("Communication failure, is the MFRC522 properly connected?");
 		return false;
 	}
 	return true;
@@ -53,7 +53,7 @@ void CardReaderAppLoop()
 		{
 			return;
 		}
-		printf("New card present\r\n");
+		SYSLOG_I("New card present");
 		CountNewCard++;
 		CardInfo.UtcDateTime = (uint32_t)(RtcGetTimerValue() / 1000);
 		CardInfo.Id = CountNewCard;
@@ -61,7 +61,7 @@ void CardReaderAppLoop()
 		// Select one of the cards
 		if ( ! PICC_ReadCardSerial()) 
 		{
-			printf("Err read card serial\r\n");
+			SYSLOG_E("Err read card serial");
 			CardInfo.ReadResult = eCardReadErr;
 		}
 		else
@@ -74,6 +74,7 @@ void CardReaderAppLoop()
 	}
 	else
 	{
+		SYSLOG_I("Init MFRC522");
 		PCD_Init();		// Init MFRC522
 		isInit = ShowReaderDetails();	// Show details of PCD - MFRC522 Card Reader details		
 	}

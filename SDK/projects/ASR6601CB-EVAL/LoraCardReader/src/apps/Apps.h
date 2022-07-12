@@ -1,6 +1,7 @@
 #ifndef APPS_H_
 #define APPS_H_
 #include "CardReader.h"
+#include "syslog.h"
 
 #define CARD_INFO_BUFFER_SIZE	8
 

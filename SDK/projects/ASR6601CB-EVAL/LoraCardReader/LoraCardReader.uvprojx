@@ -591,6 +591,16 @@
               <FileType>1</FileType>
               <FilePath>.\src\apps\CardInfoSender.c</FilePath>
             </File>
+            <File>
+              <FileName>syslog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\apps\syslog.c</FilePath>
+            </File>
+            <File>
+              <FileName>syslog.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\apps\syslog.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

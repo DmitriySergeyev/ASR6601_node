@@ -23,7 +23,7 @@ static void board_init()
     delay_ms(100);
     pwr_xo32k_lpm_cmd(false); // Запрещаем переходить в Sleep
 		debug_init();
-		printf("LoraWan card reader started\r\n");
+		SYSLOG_I("LoraWan card reader started");
 
     RtcInit();
 }

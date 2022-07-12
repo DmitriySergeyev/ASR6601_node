@@ -15,19 +15,19 @@ static sSendBuffer SendBuffer =
 
 void SendBufferPut(sCardInfo Info)
 {
-		printf("Put packet\r\n");
     SendBuffer.Buff[SendBuffer.idxIn++] = Info;
     if (SendBuffer.idxIn >= CARD_INFO_BUFFER_SIZE) SendBuffer.idxIn = 0;
+		SYSLOG_I("Put packet. Packet count = %d", SendBufferGetCount());
 }
 
 sCardInfo SendBufferPop(bool isNotInc)
 {
-		printf("Pop packet\r\n");
     sCardInfo retval = SendBuffer.Buff[SendBuffer.idxOut];
 		if (isNotInc == false)
 		{
 			SendBufferInc();
 		}
+		SYSLOG_I("Pop packet. Packet count = %d", SendBufferGetCount());
     return retval;
 }
 
@@ -35,12 +35,12 @@ void SendBufferInc( )
 {
 	if (SendBufferGetCount() != 0)
 	{
-		printf("Inc packet\r\n");
 		SendBuffer.idxOut++;
 		if (SendBuffer.idxOut >= CARD_INFO_BUFFER_SIZE) 
 		{
 			SendBuffer.idxOut = 0;
 		}
+		SYSLOG_I("Inc buffer. Packet count = %d", SendBufferGetCount());
 	}
 }
 

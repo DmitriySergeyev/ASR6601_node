@@ -1,5 +1,6 @@
 #include "CardReader.h"
 #include "HwCardReader.h"
+#include "syslog.h"
 
 
 static uint8_t MIFARE_TwoStepHelper(uint8_t command, uint8_t blockAddr, long data);
@@ -1264,18 +1265,11 @@ void PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned from a succe
 								) {
 	MIFARE_Key key;
 
-	// UID
-	printf("Card UID:");
-	for (uint8_t i = 0; i < uid->size; i++) 
-	{
-		printf("0x%02X", uid->uidByte[i]);
-	}
-	printf("\r\n");
-
+	// UID								
+	SYSDUMP_D("Card UID:", uid->uidByte, uid->size);
 	// PICC type
 	uint8_t piccType = PICC_GetType(uid->sak);
-	printf("PICC type: ");
-	printf("%s\r\n", PICC_GetTypeName(piccType));
+	SYSLOG_D("PICC type: %s", PICC_GetTypeName(piccType));
 
 	// Dump contents
 	switch (piccType) {
@@ -1297,7 +1291,7 @@ void PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned from a succe
 		case PICC_TYPE_ISO_18092:
 		case PICC_TYPE_MIFARE_PLUS:
 		case PICC_TYPE_TNP3XXX:
-			printf("Dumping memory contents not implemented for that PICC type.\r\n");
+			SYSLOG_W("Dumping memory contents not implemented for that PICC type.");
 			break;
 
 		case PICC_TYPE_UNKNOWN:
@@ -1305,8 +1299,6 @@ void PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned from a succe
 		default:
 			break; // No memory dump here
 	}
-
-	printf("\r\n");
 	PICC_HaltA(); // Already done if it was a MIFARE Classic PICC.
 } // End PICC_DumpToSerial()
 								
@@ -1319,20 +1311,12 @@ void PICC_DumpToSerial2(Uid *uid	///< Pointer to Uid struct returned from a succ
 								) 
 {
 	uint8_t piccType = PICC_GetType(uid->sak);
-	printf("PICC type: ");
-	printf("%s\r\n", PICC_GetTypeName(piccType));
-	// UID
-	printf("Card UID:");
-	for (uint8_t i = 0; i < uid->size; i++) 
-	{
-		printf("0x%02X  ", uid->uidByte[i]);
-	}
-	printf("\r\n");
+	// UID								
+	SYSDUMP_D("Card UID:", uid->uidByte, uid->size);
+	// PICC type
+	SYSLOG_D("PICC type: %s", PICC_GetTypeName(piccType));
 	
 	PICC_HaltA(); // Already done if it was a MIFARE Classic PICC.
-
-	// PICC type
-	
 } // End PICC_DumpToSerial()
 
 /**
@@ -1366,7 +1350,6 @@ void PICC_DumpMifareClassicToSerial(	Uid *uid,		///< Pointer to Uid struct retur
 
 	// Dump sectors, highest address first.
 	if (no_of_sectors) {
-		printf("Sector Block   0  1  2  3   4  5  6  7   8  9 10 11  12 13 14 15  AccessBits");
 		for (int8_t i = no_of_sectors - 1; i >= 0; i--) {
 			PICC_DumpMifareClassicSectorToSerial(uid, key, i);
 		}
@@ -1428,16 +1411,16 @@ void PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to Uid struct
 		// Sector number - only on first line
 		if (isSectorTrailer) 
 		{
-			printf("sector=%d", sector);
+			SYSLOG_D("sector=%d", sector);
 		}
 		// Block number
-		printf("blockAddr=%d", blockAddr);
+		SYSLOG_D("blockAddr=%d", blockAddr);
 		// Establish encrypted communications before reading the first block
 		if (isSectorTrailer) 
 		{
 			status = PCD_Authenticate(PICC_CMD_MF_AUTH_KEY_A, firstBlock, key, uid);
 			if (status != STATUS_OK) {
-				printf("PCD_Authenticate() failed: %s\r\n",GetStatusCodeName(status));
+				SYSLOG_E("PCD_Authenticate() failed: %s",GetStatusCodeName(status));
 				return;
 			}
 		}
@@ -1446,14 +1429,11 @@ void PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to Uid struct
 		status = MIFARE_Read(blockAddr, buffer, &uint8_tCount);
 		if (status != STATUS_OK) 
 		{
-			printf("MIFARE_Read() failed: %s\r\n",GetStatusCodeName(status));
+			SYSLOG_E("MIFARE_Read() failed: %s",GetStatusCodeName(status));
 			continue;
 		}
 		// Dump data
-		for (uint8_t index = 0; index < 16; index++) 
-		{
-			printf("0x%02X ",buffer[index]);
-		}
+		SYSDUMP_D("BUFF:", buffer, 16);
 		// Parse sector trailer data
 		if (isSectorTrailer) {
 			c1  = buffer[7] >> 4;
@@ -1483,23 +1463,18 @@ void PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to Uid struct
 		if (firstInGroup) 
 		{
 			// Print access bits
-			printf(" [ ");
-			printf("%d",(g[group] >> 2) & 1); printf(" ");
-			printf("%d",(g[group] >> 1) & 1); printf(" ");
-			printf("%d",(g[group] >> 0) & 1);
-			printf(" ] ");
+			SYSLOG_D(" [ %d %d %d ] ", ((g[group] >> 2) & 1), ((g[group] >> 1) & 1), ((g[group] >> 0) & 1));
 			if (invertedError) 
 			{
-				printf(" Inverted access bits did not match! \r\n");
+				SYSLOG_W(" Inverted access bits did not match!");
 			}
 		}
 
-		if (group != 3 && (g[group] == 1 || g[group] == 6)) { // Not a sector trailer, a value block
+		if (group != 3 && (g[group] == 1 || g[group] == 6)) 
+		{ // Not a sector trailer, a value block
 			uint32_t value = (uint32_t)(buffer[3]<<24) | (uint32_t)(buffer[2]<<16) | (uint32_t)(buffer[1]<<8) | (uint32_t)(buffer[0]);
-			printf(" Value=0x%08lX", value);
-			printf(" Adr=0x%02X", buffer[12]);
+			SYSLOG_D(" Value=0x%08lX Adr=0x%02X", value, buffer[12]);
 		}
-		printf("\r\n");
 	}
 
 	return;
@@ -1514,7 +1489,6 @@ void PICC_DumpMifareUltralightToSerial() {
 	uint8_t buffer[18];
 	uint8_t i;
 
-	printf("Page  0  1  2  3");
 	// Try the mpages of the original Ultralight. Ultralight C has more pages.
 	for (uint8_t page = 0; page < 16; page +=4) { // Read returns data for 4 pages at a time.
 		// Read pages
@@ -1522,20 +1496,15 @@ void PICC_DumpMifareUltralightToSerial() {
 		status = MIFARE_Read(page, buffer, &uint8_tCount);
 		if (status != STATUS_OK) 
 		{
-			printf("MIFARE_Read() failed: %s\r\n",GetStatusCodeName(status));
+			SYSLOG_E("MIFARE_Read() failed: %s",GetStatusCodeName(status));
 			break;
 		}
 		// Dump data
 		for (uint8_t offset = 0; offset < 4; offset++) 
 		{
 			i = page + offset;
-			printf(" %d  ",i);
-			for (uint8_t index = 0; index < 4; index++) 
-			{
-				i = 4 * offset + index;
-				printf("0x%02X", buffer[i]);
-			}
-			printf("\r\n");
+			SYSLOG_D("i = %d ",i);
+			SYSDUMP_D("Buffer:", (void*)&buffer[4 * offset], 4);
 		}
 	}
 } // End PICC_DumpMifareUltralightToSerial()
@@ -1589,8 +1558,7 @@ bool MIFARE_OpenUidBackdoor(bool logErrors) {
 	uint8_t status = PCD_TransceiveData(&cmd, (uint8_t)1, response, &received, &validBits, (uint8_t)0, false); // 40
 	if(status != STATUS_OK) {
 		if(logErrors) {
-			printf("Card did not respond to 0x40 after HALT command. Are you sure it is a UID changeable one?");
-			printf("Error name: %s\r\n", GetStatusCodeName(status));
+			SYSLOG_W("Card did not respond to 0x40 after HALT command. Are you sure it is a UID changeable one?. Error name: %s", GetStatusCodeName(status));
 		}
 		return false;
 	}
@@ -1598,7 +1566,7 @@ bool MIFARE_OpenUidBackdoor(bool logErrors) {
 	{
 		if (logErrors) 
 		{
-			printf("Got bad response on backdoor 0x40 command: 0x%02X [%d valid bits]\r\n",response[0],validBits);
+			SYSLOG_W("Got bad response on backdoor 0x40 command: 0x%02X [%d valid bits]",response[0],validBits);
 		}
 		return false;
 	}
@@ -1608,14 +1576,13 @@ bool MIFARE_OpenUidBackdoor(bool logErrors) {
 	status = PCD_TransceiveData(&cmd, (uint8_t)1, response, &received, &validBits, (uint8_t)0, false); // 43
 	if(status != STATUS_OK) {
 		if(logErrors) {
-			printf("Error in communication at command 0x43, after successfully executing 0x40\r\n");
-			printf("Error name: %s\r\n",GetStatusCodeName(status));
+			SYSLOG_W("Error in communication at command 0x43, after successfully executing 0x40. Error name: %s\r\n",GetStatusCodeName(status));
 		}
 		return false;
 	}
 	if (received != 1 || response[0] != 0x0A) {
 		if (logErrors) {
-			printf("Got bad response on backdoor 0x43 command: 0x%02X [%d valid bits]\r\n", response[0], validBits);
+			SYSLOG_W("Got bad response on backdoor 0x43 command: 0x%02X [%d valid bits]", response[0], validBits);
 		}
 		return false;
 	}
@@ -1641,7 +1608,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors)
 	// UID + BCC uint8_t can not be larger than 16 together
 	if (!newUid || !uidSize || uidSize > 15) {
 		if (logErrors) {
-			printf("New UID buffer empty, size 0, or size > 15 given\r\n");
+			SYSLOG_W("New UID buffer empty, size 0, or size > 15 given");
 		}
 		return false;
 	}
@@ -1660,7 +1627,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors)
 //			  PICC_WakeupA(atqa_answer, &atqa_size);
 
 			if (!PICC_IsNewCardPresent() || !PICC_ReadCardSerial()) {
-				printf("No card was previously selected, and none are available. Failed to set UID.\r\n");
+				SYSLOG_E("No card was previously selected, and none are available. Failed to set UID.");
 				return false;
 			}
 
@@ -1668,14 +1635,14 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors)
 			if (status != STATUS_OK) {
 				// We tried, time to give up
 				if (logErrors) {
-					printf("Failed to authenticate to card for reading, could not set UID: %s\r\n",GetStatusCodeName(status));
+					SYSLOG_E("Failed to authenticate to card for reading, could not set UID: %s",GetStatusCodeName(status));
 				}
 				return false;
 			}
 		}
 		else {
 			if (logErrors) {
-				printf("PCD_Authenticate() failed: %s\r\n", GetStatusCodeName(status));
+				SYSLOG_E("PCD_Authenticate() failed: %s", GetStatusCodeName(status));
 			}
 			return false;
 		}
@@ -1687,8 +1654,8 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors)
 	status = MIFARE_Read((uint8_t)0, block0_buffer, &uint8_tCount);
 	if (status != STATUS_OK) {
 		if (logErrors) {
-			printf("MIFARE_Read() failed: %s\r\n", GetStatusCodeName(status));
-			printf("Are you sure your KEY A for sector 0 is 0xFFFFFFFFFFFF?\r\n");
+			SYSLOG_E("MIFARE_Read() failed: %s", GetStatusCodeName(status));
+			SYSLOG_W("Are you sure your KEY A for sector 0 is 0xFFFFFFFFFFFF?");
 		}
 		return false;
 	}
@@ -1718,7 +1685,7 @@ bool MIFARE_SetUid(uint8_t *newUid, uint8_t uidSize, bool logErrors)
 	status = MIFARE_Write((uint8_t)0, block0_buffer, (uint8_t)16);
 	if (status != STATUS_OK) {
 		if (logErrors) {
-			printf("MIFARE_Write() failed: %s\r\n", GetStatusCodeName(status));
+			SYSLOG_E("MIFARE_Write() failed: %s\r\n", GetStatusCodeName(status));
 		}
 		return false;
 	}
@@ -1743,7 +1710,7 @@ bool MIFARE_UnbrickUidSector(bool logErrors) {
 	uint8_t status = MIFARE_Write((uint8_t)0, block0_buffer, (uint8_t)16);
 	if (status != STATUS_OK) {
 		if (logErrors) {
-			printf("MIFARE_Write() failed: %s\r\n", GetStatusCodeName(status));
+			SYSLOG_E("MIFARE_Write() failed: %s\r\n", GetStatusCodeName(status));
 		}
 		return false;
 	}

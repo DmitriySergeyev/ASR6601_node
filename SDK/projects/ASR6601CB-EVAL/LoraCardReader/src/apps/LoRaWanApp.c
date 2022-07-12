@@ -150,13 +150,13 @@ static void PrepareTxFrame( eDeviceSendType Type )
 		switch (Type)
 		{
 			case DEVICE_SEND_PING:
-				printf("Send ping packet\r\n");
+				SYSLOG_I("Send ping packet");
 				TxDataPort = PING_TX_PORT;
 				IsTxConfirmed = false;			
 				TxDataSize = PreparePingFrame(TxData);
 				break;
 			case DEVICE_SEND_CARD:
-				printf("Send card info packet\r\n");
+				SYSLOG_I("Send card info packet");
 				TxDataPort = CARD_INFO_TX_PORT;
 				IsTxConfirmed = CONFIRMED_CARD_INFO_MSG_ON;
 				CardInfo = SendBufferPop(CONFIRMED_CARD_INFO_MSG_ON);
@@ -166,6 +166,8 @@ static void PrepareTxFrame( eDeviceSendType Type )
 				TxDataSize = 0;
 				break;
 		}
+		SYSDUMP_D("Data: ", TxData, TxDataSize);
+		SYSLOG_D("TxDataPort=%d, IsTxConfirmed=%d",TxDataPort,IsTxConfirmed);
 }
 
 /*!
@@ -337,7 +339,7 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
         return;
     }
 
-    printf( "receive data: rssi = %d, snr = %d, datarate = %d\r\n", mcpsIndication->Rssi, (int)mcpsIndication->Snr,
+    SYSLOG_D( "receive data: rssi = %d, snr = %d, datarate = %d", mcpsIndication->Rssi, (int)mcpsIndication->Snr,
                  (int)mcpsIndication->RxDatarate);
     switch( mcpsIndication->McpsIndication )
     {
@@ -395,7 +397,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         {
             if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
             {
-                printf("joined\r\n");
+                SYSLOG_I("joined\r\n");
                 // Status is OK, node has joined the network
                 DeviceState = DEVICE_STATE_SEND;
             }
@@ -403,7 +405,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
             {
                 MlmeReq_t mlmeReq;
                 
-                printf("join failed\r\n");
+                SYSLOG_W("join failed\r\n");
                 // Join was not successful. Try to join again
                 mlmeReq.Type = MLME_JOIN;
                 mlmeReq.Req.Join.DevEui = DevEui;
@@ -489,7 +491,7 @@ void LoRaWanAppStart()
     DeviceState = DEVICE_STATE_INIT;
 		DeviceSendType = DEVICE_SEND_PING;
 
-    printf("ClassA app start\r\n");	
+    SYSLOG_I("ClassA app start\r\n");	
 }
 
 extern void LoRaWanAppLoop()
