@@ -24,47 +24,48 @@
 
 #define LORAWAN_APP_DATA_BUFF_SIZE                  64
 
-typedef enum
+typedef enum eDeviceSendType_t
 {
+		DEVICE_SEND_NOT,
     DEVICE_SEND_PING,
     DEVICE_SEND_CARD,	
 } eDeviceSendType;
 
-typedef struct
+typedef struct sTxInfo_t
 {
-	eDeviceSendType Type;
 	uint8_t Port;
 	uint8_t Size;
 	uint8_t Buff[LORAWAN_APP_DATA_BUFF_SIZE];
 	bool IsConfirmed;
-} sTxInfo ;
+} sTxInfo;
 
-static sTxInfo TxInfo;
-static sDevSetting DevSetting;
-
-static uint32_t TxPingDelay = 0;
-
-/*!
- * Timer to handle the application data transmission duty cycle
- */
-static TimerEvent_t PingPacketTimer;
-
-/*!
- * Indicates if a new packet can be sent
- */
-static bool NextTx = true;
-
-/*!
- * Device states
- */
-static enum eDeviceState
+typedef enum eLoRaWanState_t
 {
     DEVICE_STATE_INIT,
     DEVICE_STATE_JOIN,
     DEVICE_STATE_SEND,
     DEVICE_STATE_CYCLE,
     DEVICE_STATE_IDLE
-}DeviceState;
+}eLoRaWanState;
+
+typedef struct
+{
+	eLoRaWanState State;
+	eDeviceSendType Type;
+	bool NextTx;
+	uint16_t TryPing;
+	uint16_t TrySend;
+	uint32_t PingTimeout;
+} sLoraWanDrv;
+
+static sTxInfo TxInfo;
+static sDevSetting DevSetting;
+static sLoraWanDrv LoraWanDrv;
+
+/*!
+ * Timer to handle the application data transmission duty cycle
+ */
+static TimerEvent_t PingPacketTimer;
 
 static uint8_t PreparePingFrame(uint8_t *Buff)
 {
@@ -186,9 +187,9 @@ static void OnTxPingPacketTimerEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-						TxInfo.Type = DEVICE_SEND_PING;
-            DeviceState = DEVICE_STATE_SEND;
-            NextTx = true;
+						LoraWanDrv.Type = DEVICE_SEND_PING;
+            LoraWanDrv.State = DEVICE_STATE_SEND;
+            LoraWanDrv.NextTx = true;
         }
         else
         {
@@ -201,11 +202,11 @@ static void OnTxPingPacketTimerEvent( void )
 
             if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
             {
-                DeviceState = DEVICE_STATE_IDLE;
+                LoraWanDrv.State = DEVICE_STATE_IDLE;
             }
             else
             {
-                DeviceState = DEVICE_STATE_CYCLE;
+                LoraWanDrv.State = DEVICE_STATE_CYCLE;
             }
         }
     }
@@ -228,14 +229,14 @@ static void OnTxCardInfoPacketEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-						TxInfo.Type = DEVICE_SEND_CARD;
-            DeviceState = DEVICE_STATE_SEND;
-            NextTx = true;
+						LoraWanDrv.Type = DEVICE_SEND_CARD;
+            LoraWanDrv.State = DEVICE_STATE_SEND;
+            LoraWanDrv.NextTx = true;
         }
         else
         {
-						TxPingDelay = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
-						DeviceState = DEVICE_STATE_CYCLE;
+						LoraWanDrv.PingTimeout = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
+						LoraWanDrv.State = DEVICE_STATE_CYCLE;
         }
     }	
 }
@@ -275,7 +276,7 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
                 break;
         }
     }
-    NextTx = true;
+    LoraWanDrv.NextTx = true;
 }
 
 /*!
@@ -351,7 +352,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
             {
                 SYSLOG_I("joined\r\n");
                 // Status is OK, node has joined the network
-                DeviceState = DEVICE_STATE_SEND;
+                LoraWanDrv.State = DEVICE_STATE_SEND;
             }
             else
             {
@@ -367,11 +368,11 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
 
                 if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
                 {
-                    DeviceState = DEVICE_STATE_IDLE;
+                    LoraWanDrv.State = DEVICE_STATE_IDLE;
                 }
                 else
                 {
-                    DeviceState = DEVICE_STATE_CYCLE;
+                    LoraWanDrv.State = DEVICE_STATE_CYCLE;
                 }
             }
             break;
@@ -388,7 +389,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         default:
             break;
     }
-    NextTx = true;
+    LoraWanDrv.NextTx = true;
 }
 
 /*!
@@ -440,8 +441,8 @@ static MibRequestConfirm_t mibReq;
 
 void LoRaWanAppStart()
 {
-    DeviceState = DEVICE_STATE_INIT;
-		TxInfo.Type = DEVICE_SEND_PING;
+    LoraWanDrv.State = DEVICE_STATE_INIT;
+		LoraWanDrv.Type = DEVICE_SEND_PING;
 	
 		if (ReadSettings(&DevSetting) != true)
 		{
@@ -458,7 +459,7 @@ extern void LoRaWanAppLoop()
 			Radio.IrqProcess();
     }
 					
-		switch( DeviceState )
+		switch( LoraWanDrv.State )
 		{
 				case DEVICE_STATE_INIT:
 				{
@@ -489,7 +490,7 @@ extern void LoRaWanAppLoop()
 						
 						lwan_dev_params_update();
 						
-						DeviceState = DEVICE_STATE_JOIN;
+						LoraWanDrv.State = DEVICE_STATE_JOIN;
 						break;
 				}
 				case DEVICE_STATE_JOIN:
@@ -510,11 +511,11 @@ extern void LoRaWanAppLoop()
 
 							if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
 							{
-									DeviceState = DEVICE_STATE_IDLE;
+									LoraWanDrv.State = DEVICE_STATE_IDLE;
 							}
 							else
 							{
-									DeviceState = DEVICE_STATE_CYCLE;
+									LoraWanDrv.State = DEVICE_STATE_CYCLE;
 							}
 						}
 						else
@@ -539,36 +540,36 @@ extern void LoRaWanAppLoop()
 							mibReq.Param.IsNetworkJoined = true;
 							LoRaMacMibSetRequestConfirm( &mibReq );
 
-							DeviceState = DEVICE_STATE_SEND;
+							LoraWanDrv.State = DEVICE_STATE_SEND;
 						}
 						break;
 				}
 				case DEVICE_STATE_SEND:
 				{
-						if( NextTx == true )
+						if( LoraWanDrv.NextTx == true )
 						{
-								PrepareTxFrame( TxInfo.Type );
+								PrepareTxFrame( LoraWanDrv.Type );
 
-								NextTx = SendFrame( );
+								LoraWanDrv.NextTx = SendFrame( );
 						}
 						
 						// Schedule next packet transmission
-						TxPingDelay = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
-						DeviceState = DEVICE_STATE_CYCLE;
+						LoraWanDrv.PingTimeout = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
+						LoraWanDrv.State = DEVICE_STATE_CYCLE;
 						break;
 				}
 				case DEVICE_STATE_CYCLE:
 				{
-						DeviceState = DEVICE_STATE_IDLE;
-						SYSLOG_I("Set ping delay = %d", TxPingDelay);
+						LoraWanDrv.State = DEVICE_STATE_IDLE;
+						SYSLOG_I("Set ping timeout = %d msec", LoraWanDrv.PingTimeout);
 						// Schedule next packet transmission
-						TimerSetValue( &PingPacketTimer, TxPingDelay );
+						TimerSetValue( &PingPacketTimer, LoraWanDrv.PingTimeout );
 						TimerStart( &PingPacketTimer );
 						break;
 				}
 				case DEVICE_STATE_IDLE:
 				{
-						if ((NextTx == true) && (SendBufferGetCount() != 0))
+						if ((LoraWanDrv.NextTx == true) && (SendBufferGetCount() != 0))
 						{
 							OnTxCardInfoPacketEvent();
 						}
@@ -576,7 +577,7 @@ extern void LoRaWanAppLoop()
 				}
 				default:
 				{
-						DeviceState = DEVICE_STATE_INIT;
+						LoraWanDrv.State = DEVICE_STATE_INIT;
 						break;
 				}
 		}	
