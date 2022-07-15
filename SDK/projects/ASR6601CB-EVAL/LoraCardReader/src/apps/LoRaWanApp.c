@@ -496,6 +496,11 @@ void LoRaWanAppStart()
 
 extern void LoRaWanAppLoop()
 {
+	  if (Radio.IrqProcess != NULL) 
+		{
+			Radio.IrqProcess();
+    }
+					
 		switch( DeviceState )
 		{
 				case DEVICE_STATE_INIT:
@@ -603,8 +608,6 @@ extern void LoRaWanAppLoop()
 						{
 							OnTxCardInfoPacketEvent();
 						}
-						// Process Radio IRQ
-						Radio.IrqProcess( );
 						break;
 				}
 				default:

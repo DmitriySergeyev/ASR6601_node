@@ -19,6 +19,7 @@ static void board_init()
     rcc_enable_peripheral_clk(RCC_PERIPHERAL_SAC, true);
     rcc_enable_peripheral_clk(RCC_PERIPHERAL_LORA, true);
 		rcc_enable_peripheral_clk(RCC_PERIPHERAL_I2C0, true);
+		rcc_enable_peripheral_clk(RCC_PERIPHERAL_SYSCFG, true);
 
     delay_ms(100);
     pwr_xo32k_lpm_cmd(false); // Запрещаем переходить в Sleep

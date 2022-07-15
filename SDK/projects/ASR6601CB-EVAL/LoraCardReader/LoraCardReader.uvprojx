@@ -601,6 +601,11 @@
               <FileType>5</FileType>
               <FilePath>.\src\apps\syslog.h</FilePath>
             </File>
+            <File>
+              <FileName>Config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\apps\Config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
