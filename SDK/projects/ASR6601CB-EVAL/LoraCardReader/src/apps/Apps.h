@@ -16,6 +16,12 @@ typedef enum eJoinMode_t
     JOIN_MODE_ABP
 } eJoinMode;
 
+typedef enum eAdrMode_t 
+{
+    ADR_MODE_ON,
+    ADR_MODE_OFF,
+} eAdrMode;
+
 typedef struct sOTAKeys_t 
 {
     uint8_t deveui[LORA_EUI_LENGTH];
@@ -47,6 +53,7 @@ typedef struct sSendDefs_t
 typedef struct sDevSetting_t 
 {
 		eJoinMode JoinMode;
+		eAdrMode AdrMode;
 		sOTAKeys OTAKeys;
     sABPKeys ABPKeys;
 		sPingDefs PingDefs;
@@ -60,6 +67,8 @@ typedef struct sDevSettingFile_t
     uint16_t checksum;
 } __attribute__((packed))sDevSettingFile;
 
+extern bool ReadSettings(sDevSetting *setting);
+extern bool WriteSettings(sDevSetting *setting);
 
 /* Функции хранения сообщений (буфер) */
 #define CARD_INFO_BUFFER_SIZE	8

@@ -8,6 +8,7 @@
 
 #define ACTIVE_REGION LORAMAC_REGION_EU868
 
+
 #ifndef ACTIVE_REGION
 
 #warning "No active region defined, LORAMAC_REGION_CN470 will be used as default."
@@ -17,79 +18,31 @@
 #endif
 
 /*!
- * Defines the application data transmission duty cycle. 60s, value in [ms].
- */
-#define PING_TX_DUTYCYCLE                           60000
-
-/*!
- * Defines a random delay for application data transmission duty cycle. 5s,
- * value in [ms].
- */
-#define PING_TX_DUTYCYCLE_RND                       5000
-
-/*!
  * Default datarate
  */
 #define LORAWAN_DEFAULT_DATARATE                    DR_0
 
-/*!
- * LoRaWAN confirmed messages
- */
-#define CONFIRMED_CARD_INFO_MSG_ON                  true
+#define LORAWAN_APP_DATA_BUFF_SIZE                  64
 
-/*!
- * LoRaWAN Adaptive Data Rate
- *
- * \remark Please note that when ADR is enabled the end-device should be static
- */
-#define LORAWAN_ADR_ON                               0
+typedef enum
+{
+    DEVICE_SEND_PING,
+    DEVICE_SEND_CARD,	
+} eDeviceSendType;
 
-/*!
- * LoRaWAN application ports
- */
-#define PING_TX_PORT                            		 2
-#define CARD_INFO_TX_PORT                            3
+typedef struct
+{
+	eDeviceSendType Type;
+	uint8_t Port;
+	uint8_t Size;
+	uint8_t Buff[LORAWAN_APP_DATA_BUFF_SIZE];
+	bool IsConfirmed;
+} sTxInfo ;
 
-static uint8_t enOTAA = OVER_THE_AIR_ACTIVATION;
-   
-static uint8_t DevEui[] = LORAWAN_DEVICE_EUI;
-static uint8_t AppEui[] = LORAWAN_APPLICATION_EUI;
-static uint8_t AppKey[] = LORAWAN_APPLICATION_KEY;
+static sTxInfo TxInfo;
+static sDevSetting DevSetting;
 
-
-static uint8_t NwkSKey[] = LORAWAN_NWKSKEY;
-static uint8_t AppSKey[] = LORAWAN_APPSKEY;
-static uint32_t DevAddr = LORAWAN_DEVICE_ADDRESS;
-
-
-/*!
- * Application port
- */
-static uint8_t TxDataPort;
-
-/*!
- * User application data size
- */
-static uint8_t TxDataSize;
-/*!
- * User application data buffer size
- */
-#define LORAWAN_APP_DATA_BUFF_SIZE                           64
-
-/*!
- * User application data
- */
-static uint8_t TxData[LORAWAN_APP_DATA_BUFF_SIZE];
-
-/*!
- * Indicates if the node is sending confirmed or unconfirmed messages
- */
-static uint8_t IsTxConfirmed = false;
-
-/*!
- * Defines the application data transmission duty cycle
- */
-static uint32_t TxDutyCycleTime = PING_TX_DUTYCYCLE;
+static uint32_t TxPingDelay = 0;
 
 /*!
  * Timer to handle the application data transmission duty cycle
@@ -112,14 +65,6 @@ static enum eDeviceState
     DEVICE_STATE_CYCLE,
     DEVICE_STATE_IDLE
 }DeviceState;
-
-typedef enum
-{
-    DEVICE_SEND_PING,
-    DEVICE_SEND_CARD,	
-} eDeviceSendType;
-
-static eDeviceSendType DeviceSendType;
 
 static uint8_t PreparePingFrame(uint8_t *Buff)
 {
@@ -151,23 +96,30 @@ static void PrepareTxFrame( eDeviceSendType Type )
 		{
 			case DEVICE_SEND_PING:
 				SYSLOG_I("Send ping packet");
-				TxDataPort = PING_TX_PORT;
-				IsTxConfirmed = false;			
-				TxDataSize = PreparePingFrame(TxData);
+				TxInfo.Port = DevSetting.PingDefs.Port;
+				if (DevSetting.PingDefs.NbTrials == 0)
+				{
+					TxInfo.IsConfirmed = false;			
+				}
+				else
+				{
+					TxInfo.IsConfirmed = true;		
+				}
+				TxInfo.Size = PreparePingFrame(TxInfo.Buff);
 				break;
 			case DEVICE_SEND_CARD:
 				SYSLOG_I("Send card info packet");
-				TxDataPort = CARD_INFO_TX_PORT;
-				IsTxConfirmed = CONFIRMED_CARD_INFO_MSG_ON;
-				CardInfo = SendBufferPop(CONFIRMED_CARD_INFO_MSG_ON);
-				TxDataSize = PrepareCardInfoFrame(CardInfo, TxData);
+				TxInfo.Port = DevSetting.SendDefs.Port;
+				TxInfo.IsConfirmed = true;
+				CardInfo = SendBufferPop(true);
+				TxInfo.Size = PrepareCardInfoFrame(CardInfo, TxInfo.Buff);
 				break;	
 			default:
-				TxDataSize = 0;
+				TxInfo.Size = 0;
 				break;
 		}
-		SYSDUMP_D("Data: ", TxData, TxDataSize);
-		SYSLOG_D("TxDataPort=%d, IsTxConfirmed=%d",TxDataPort,IsTxConfirmed);
+		SYSDUMP_D("Data: ", TxInfo.Buff, TxInfo.Size);
+		SYSLOG_D("TxDataPort=%d, IsTxConfirmed=%d",TxInfo.Port,TxInfo.IsConfirmed);
 }
 
 /*!
@@ -180,7 +132,7 @@ static bool SendFrame( void )
     McpsReq_t mcpsReq;
     LoRaMacTxInfo_t txInfo;
 
-    if( LoRaMacQueryTxPossible( TxDataSize, &txInfo ) != LORAMAC_STATUS_OK )
+    if( LoRaMacQueryTxPossible( TxInfo.Size, &txInfo ) != LORAMAC_STATUS_OK )
     {
         // Send empty frame in order to flush MAC commands
         mcpsReq.Type = MCPS_UNCONFIRMED;
@@ -190,20 +142,20 @@ static bool SendFrame( void )
     }
     else
     {
-        if( IsTxConfirmed == false )
+        if( TxInfo.IsConfirmed == false )
         {
             mcpsReq.Type = MCPS_UNCONFIRMED;
-            mcpsReq.Req.Unconfirmed.fPort = TxDataPort;
-            mcpsReq.Req.Unconfirmed.fBuffer = TxData;
-            mcpsReq.Req.Unconfirmed.fBufferSize = TxDataSize;
+            mcpsReq.Req.Unconfirmed.fPort = TxInfo.Port;
+            mcpsReq.Req.Unconfirmed.fBuffer = TxInfo.Buff;
+            mcpsReq.Req.Unconfirmed.fBufferSize = TxInfo.Size;
             mcpsReq.Req.Unconfirmed.Datarate = LORAWAN_DEFAULT_DATARATE;
         }
         else
         {
             mcpsReq.Type = MCPS_CONFIRMED;
-            mcpsReq.Req.Confirmed.fPort = TxDataPort;
-            mcpsReq.Req.Confirmed.fBuffer = TxData;
-            mcpsReq.Req.Confirmed.fBufferSize = TxDataSize;
+            mcpsReq.Req.Confirmed.fPort = TxInfo.Port;
+            mcpsReq.Req.Confirmed.fBuffer = TxInfo.Buff;
+            mcpsReq.Req.Confirmed.fBufferSize = TxInfo.Size;
             mcpsReq.Req.Confirmed.NbTrials = 1;
             mcpsReq.Req.Confirmed.Datarate = LORAWAN_DEFAULT_DATARATE;
         }
@@ -234,7 +186,7 @@ static void OnTxPingPacketTimerEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-						DeviceSendType = DEVICE_SEND_PING;
+						TxInfo.Type = DEVICE_SEND_PING;
             DeviceState = DEVICE_STATE_SEND;
             NextTx = true;
         }
@@ -243,9 +195,9 @@ static void OnTxPingPacketTimerEvent( void )
             // Network not joined yet. Try to join again
             MlmeReq_t mlmeReq;
             mlmeReq.Type = MLME_JOIN;
-            mlmeReq.Req.Join.DevEui = DevEui;
-            mlmeReq.Req.Join.AppEui = AppEui;
-            mlmeReq.Req.Join.AppKey = AppKey;
+            mlmeReq.Req.Join.DevEui = DevSetting.OTAKeys.deveui;
+            mlmeReq.Req.Join.AppEui = DevSetting.OTAKeys.appeui;
+            mlmeReq.Req.Join.AppKey = DevSetting.OTAKeys.appkey;
 
             if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
             {
@@ -276,13 +228,13 @@ static void OnTxCardInfoPacketEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-						DeviceSendType = DEVICE_SEND_CARD;
+						TxInfo.Type = DEVICE_SEND_CARD;
             DeviceState = DEVICE_STATE_SEND;
             NextTx = true;
         }
         else
         {
-						TxDutyCycleTime = PING_TX_DUTYCYCLE + randr( 0, PING_TX_DUTYCYCLE_RND );
+						TxPingDelay = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
 						DeviceState = DEVICE_STATE_CYCLE;
         }
     }	
@@ -408,9 +360,9 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
                 SYSLOG_W("join failed\r\n");
                 // Join was not successful. Try to join again
                 mlmeReq.Type = MLME_JOIN;
-                mlmeReq.Req.Join.DevEui = DevEui;
-                mlmeReq.Req.Join.AppEui = AppEui;
-                mlmeReq.Req.Join.AppKey = AppKey;
+                mlmeReq.Req.Join.DevEui = DevSetting.OTAKeys.deveui;;
+                mlmeReq.Req.Join.AppEui = DevSetting.OTAKeys.appeui;;
+                mlmeReq.Req.Join.AppKey = DevSetting.OTAKeys.appkey;;
                 mlmeReq.Req.Join.NbTrials = 8;
 
                 if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
@@ -489,7 +441,12 @@ static MibRequestConfirm_t mibReq;
 void LoRaWanAppStart()
 {
     DeviceState = DEVICE_STATE_INIT;
-		DeviceSendType = DEVICE_SEND_PING;
+		TxInfo.Type = DEVICE_SEND_PING;
+	
+		if (ReadSettings(&DevSetting) != true)
+		{
+			SYSLOG_W("Used default setting");
+		}
 
     SYSLOG_I("ClassA app start\r\n");	
 }
@@ -516,7 +473,14 @@ extern void LoRaWanAppLoop()
 						TimerInit( &PingPacketTimer, OnTxPingPacketTimerEvent );
 
 						mibReq.Type = MIB_ADR;
-						mibReq.Param.AdrEnable = LORAWAN_ADR_ON;
+						if (DevSetting.AdrMode == ADR_MODE_ON)
+						{
+							mibReq.Param.AdrEnable = true;
+						}
+						else
+						{
+							mibReq.Param.AdrEnable = false;
+						}
 						LoRaMacMibSetRequestConfirm( &mibReq );
 
 						mibReq.Type = MIB_PUBLIC_NETWORK;
@@ -530,7 +494,7 @@ extern void LoRaWanAppLoop()
 				}
 				case DEVICE_STATE_JOIN:
 				{
-						if( enOTAA != 0 )
+						if( DevSetting.JoinMode == JOIN_MODE_OTAA )
 						{
 							MlmeReq_t mlmeReq;
 
@@ -539,9 +503,9 @@ extern void LoRaWanAppLoop()
 
 							mlmeReq.Type = MLME_JOIN;
 
-							mlmeReq.Req.Join.DevEui = DevEui;
-							mlmeReq.Req.Join.AppEui = AppEui;
-							mlmeReq.Req.Join.AppKey = AppKey;
+							mlmeReq.Req.Join.DevEui = DevSetting.OTAKeys.deveui;
+							mlmeReq.Req.Join.AppEui = DevSetting.OTAKeys.appeui;
+							mlmeReq.Req.Join.AppKey = DevSetting.OTAKeys.appkey;;
 							mlmeReq.Req.Join.NbTrials = 8;
 
 							if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
@@ -560,15 +524,15 @@ extern void LoRaWanAppLoop()
 							LoRaMacMibSetRequestConfirm( &mibReq );
 
 							mibReq.Type = MIB_DEV_ADDR;
-							mibReq.Param.DevAddr = DevAddr;
+							mibReq.Param.DevAddr = DevSetting.ABPKeys.devaddr;
 							LoRaMacMibSetRequestConfirm( &mibReq );
 
 							mibReq.Type = MIB_NWK_SKEY;
-							mibReq.Param.NwkSKey = NwkSKey;
+							mibReq.Param.NwkSKey = DevSetting.ABPKeys.nwkskey;
 							LoRaMacMibSetRequestConfirm( &mibReq );
 
 							mibReq.Type = MIB_APP_SKEY;
-							mibReq.Param.AppSKey = AppSKey;
+							mibReq.Param.AppSKey = DevSetting.ABPKeys.appskey;
 							LoRaMacMibSetRequestConfirm( &mibReq );
 
 							mibReq.Type = MIB_NETWORK_JOINED;
@@ -583,22 +547,22 @@ extern void LoRaWanAppLoop()
 				{
 						if( NextTx == true )
 						{
-								PrepareTxFrame( DeviceSendType );
+								PrepareTxFrame( TxInfo.Type );
 
 								NextTx = SendFrame( );
 						}
 						
 						// Schedule next packet transmission
-						TxDutyCycleTime = PING_TX_DUTYCYCLE + randr( 0, PING_TX_DUTYCYCLE_RND );
+						TxPingDelay = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
 						DeviceState = DEVICE_STATE_CYCLE;
 						break;
 				}
 				case DEVICE_STATE_CYCLE:
 				{
 						DeviceState = DEVICE_STATE_IDLE;
-
+						SYSLOG_I("Set ping delay = %d", TxPingDelay);
 						// Schedule next packet transmission
-						TimerSetValue( &PingPacketTimer, TxDutyCycleTime );
+						TimerSetValue( &PingPacketTimer, TxPingDelay );
 						TimerStart( &PingPacketTimer );
 						break;
 				}

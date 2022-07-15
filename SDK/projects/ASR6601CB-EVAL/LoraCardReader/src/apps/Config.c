@@ -7,6 +7,7 @@
 static sDevSetting DefaultSetting = 
 {
 		.JoinMode = JOIN_MODE_OTAA,
+		.AdrMode = ADR_MODE_ON,
 		.OTAKeys.deveui = LORAWAN_DEVICE_EUI,
 		.OTAKeys.appeui = LORAWAN_APPLICATION_EUI,
 		.OTAKeys.appkey = LORAWAN_APPLICATION_KEY,
@@ -47,7 +48,7 @@ bool ReadSettings(sDevSetting *setting)
 		SYSLOG_D("File.magic=0x%08lX, File.checksum=0x%08lX, Calc_checksum=0x%08lX", File.magic, File.checksum, crc);
 		if ((File.magic != DEV_MAGIC_NUM) || (File.checksum != crc))
 		{
-				SYSLOG_W("Setting not load. Set default");
+				SYSLOG_E("Setting not load. Set default");
 				*setting = DefaultSetting;
 				return false;
 		}
@@ -74,6 +75,7 @@ bool WriteSettings(sDevSetting *setting)
         SYSLOG_E("Error writing settings");
         return false;
     }
+		SYSLOG_I("Setting writed");
     return true;
 }
 
