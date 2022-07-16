@@ -561,7 +561,7 @@ extern void LoRaWanAppLoop()
 				case DEVICE_STATE_CYCLE:
 				{
 						LoraWanDrv.State = DEVICE_STATE_IDLE;
-						SYSLOG_I("Set ping timeout = %d msec", LoraWanDrv.PingTimeout);
+						SYSLOG_I("Set ping timeout = %lu msec", LoraWanDrv.PingTimeout);
 						// Schedule next packet transmission
 						TimerSetValue( &PingPacketTimer, LoraWanDrv.PingTimeout );
 						TimerStart( &PingPacketTimer );

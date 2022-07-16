@@ -4,12 +4,12 @@
 
 #define LOGM_LMASK    (4 << 0) /* Log level mask */
 
-static int Level = LOG_NOT;
+static int Level = LOG_DEBUG;
 static const char* const LogLevelStr[] = {"", "E", "W", "I", "D"};
 
-static bool IsPrintMessage(int level)
+bool IsPrintMessage(int level)
 {
-	if (level >= Level)
+	if (level <= Level)
 	{
 		return true;
 	}
@@ -23,7 +23,7 @@ void wsyslog(int level, const char* format, ...)
 	va_start(ap, format);      /* Variable argument begin */
 	if (IsPrintMessage(level) == true)
 	{
-		printf("%s:", LogLevelStr[level & LOGM_LMASK]);
+		printf("%s:", LogLevelStr[level]);
 		printf(format, ap);
 		printf("\r\n");
 	}
@@ -34,7 +34,7 @@ void wsysdump(int level, const char *prefix, const void* buff, size_t size)
 {
 	if (IsPrintMessage(level) == true)
 	{
-		printf("%s:%s:", LogLevelStr[level & LOGM_LMASK], prefix);
+		printf("%s:%s:", LogLevelStr[level], prefix);
 		for (size_t i = 0; i < size; i++)
 		{
 			if ((i % 16) == 0)

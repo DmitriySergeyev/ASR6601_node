@@ -45,7 +45,7 @@ bool ReadSettings(sDevSetting *setting)
     
     memcpy(&File, (void *)SETTINGS_FLASH_ADDR, sizeof(sDevSettingFile));
 		crc = crc16((uint8_t*)&File.DevSetting, sizeof(sDevSetting));
-		SYSLOG_D("File.magic=0x%08lX, File.checksum=0x%08lX, Calc_checksum=0x%08lX", File.magic, File.checksum, crc);
+		SYSLOG_D("File.magic=0x%08lX, File.checksum=0x%04x, Calc_checksum=0x%04x", File.magic, File.checksum, crc);
 		if ((File.magic != DEV_MAGIC_NUM) || (File.checksum != crc))
 		{
 				SYSLOG_E("Setting not load. Set default");
