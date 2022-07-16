@@ -26,7 +26,7 @@
 
 typedef enum eDeviceSendType_t
 {
-		DEVICE_SEND_NOT,
+    DEVICE_SEND_NOT,
     DEVICE_SEND_PING,
     DEVICE_SEND_CARD,	
 } eDeviceSendType;
@@ -50,11 +50,10 @@ typedef enum eLoRaWanState_t
 
 typedef struct
 {
-	eLoRaWanState State;
-	eDeviceSendType Type;
-	bool NextTx;
-	uint16_t TryPing;
-	uint16_t TrySend;
+	volatile eLoRaWanState State;
+	volatile eDeviceSendType SendType;
+	volatile uint16_t TryPing;
+	volatile uint16_t TrySend;
 	uint32_t PingTimeout;
 } sLoraWanDrv;
 
@@ -111,8 +110,8 @@ static void PrepareTxFrame( eDeviceSendType Type )
 			case DEVICE_SEND_CARD:
 				SYSLOG_I("Send card info packet");
 				TxInfo.Port = DevSetting.SendDefs.Port;
-				TxInfo.IsConfirmed = true;
-				CardInfo = SendBufferPop(true);
+				TxInfo.IsConfirmed = true;		
+				CardInfo = SendBufferPop();
 				TxInfo.Size = PrepareCardInfoFrame(CardInfo, TxInfo.Buff);
 				break;	
 			default:
@@ -164,10 +163,10 @@ static bool SendFrame( void )
 
     if( LoRaMacMcpsRequest( &mcpsReq ) == LORAMAC_STATUS_OK )
     {
-        return false;
+        return true;
     }
     
-    return true;
+    return false;
 }
 
 /*!
@@ -187,9 +186,8 @@ static void OnTxPingPacketTimerEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-						LoraWanDrv.Type = DEVICE_SEND_PING;
+			LoraWanDrv.SendType = DEVICE_SEND_PING;
             LoraWanDrv.State = DEVICE_STATE_SEND;
-            LoraWanDrv.NextTx = true;
         }
         else
         {
@@ -229,14 +227,13 @@ static void OnTxCardInfoPacketEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-						LoraWanDrv.Type = DEVICE_SEND_CARD;
+			LoraWanDrv.SendType = DEVICE_SEND_CARD;
             LoraWanDrv.State = DEVICE_STATE_SEND;
-            LoraWanDrv.NextTx = true;
         }
         else
         {
-						LoraWanDrv.PingTimeout = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
-						LoraWanDrv.State = DEVICE_STATE_CYCLE;
+            LoraWanDrv.PingTimeout = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
+			LoraWanDrv.State = DEVICE_STATE_CYCLE;
         }
     }	
 }
@@ -261,7 +258,20 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
             }
             case MCPS_CONFIRMED:
             {
-								SendBufferInc();
+                switch(LoraWanDrv.SendType)
+				{
+                    case DEVICE_SEND_CARD:
+                        SendBufferDelete();
+                        LoraWanDrv.TrySend = 0;
+                        LoraWanDrv.TryPing = 0;
+                        break;
+                    case DEVICE_SEND_PING:
+                        LoraWanDrv.TryPing = 0;
+                        break;
+                    default:
+                        break;
+				}
+								
                 // Check Datarate
                 // Check TxPower
                 // Check AckReceived
@@ -276,7 +286,34 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
                 break;
         }
     }
-    LoraWanDrv.NextTx = true;
+    else
+    {
+        SYSLOG_W("mcpsConfirm->Status=%d",mcpsConfirm->Status);
+        switch(LoraWanDrv.SendType)
+        {
+            case DEVICE_SEND_CARD:
+                LoraWanDrv.TryPing++;
+                LoraWanDrv.TrySend++;
+                if ((DevSetting.SendDefs.NbTrials != 0) && (LoraWanDrv.TrySend >= DevSetting.SendDefs.NbTrials))
+                {
+                    LoraWanDrv.TrySend = 0;
+                    SendBufferDelete();
+                }
+                break;
+            case DEVICE_SEND_PING:
+                LoraWanDrv.TryPing++;
+                break;
+            default:
+                break;
+		}
+    }
+	
+    if ((DevSetting.PingDefs.NbTrials != 0) && (LoraWanDrv.TryPing >= DevSetting.PingDefs.NbTrials))
+    {
+        CardReaderAppStart();
+    }       
+    SYSLOG_D("Send type=%d, TrySend=%d, TryPing=%d", LoraWanDrv.SendType, LoraWanDrv.TrySend, LoraWanDrv.TryPing);
+    LoraWanDrv.SendType = DEVICE_SEND_NOT;
 }
 
 /*!
@@ -289,11 +326,13 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
 {
     if( mcpsIndication->Status != LORAMAC_EVENT_INFO_STATUS_OK )
     {
+        SYSLOG_W("mcpsIndication->Status = %d",mcpsIndication->Status);
         return;
     }
 
     SYSLOG_D( "receive data: rssi = %d, snr = %d, datarate = %d", mcpsIndication->Rssi, (int)mcpsIndication->Snr,
                  (int)mcpsIndication->RxDatarate);
+    SYSLOG_D("mcpsIndication->McpsIndication = %d",mcpsIndication->McpsIndication);
     switch( mcpsIndication->McpsIndication )
     {
         case MCPS_UNCONFIRMED:
@@ -344,6 +383,7 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
  */
 static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
 {
+    SYSLOG_D("mlmeConfirm->MlmeRequest = %d",mlmeConfirm->MlmeRequest);
     switch( mlmeConfirm->MlmeRequest )
     {
         case MLME_JOIN:
@@ -353,6 +393,8 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
                 SYSLOG_I("joined\r\n");
                 // Status is OK, node has joined the network
                 LoraWanDrv.State = DEVICE_STATE_SEND;
+                LoraWanDrv.SendType = DEVICE_SEND_PING;
+                return;
             }
             else
             {
@@ -389,7 +431,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         default:
             break;
     }
-    LoraWanDrv.NextTx = true;
+    LoraWanDrv.SendType = DEVICE_SEND_NOT;
 }
 
 /*!
@@ -399,6 +441,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
  */
 static void MlmeIndication( MlmeIndication_t *mlmeIndication )
 {
+    SYSLOG_D("mlmeIndication->MlmeIndication = %d",mlmeIndication->MlmeIndication);
     switch( mlmeIndication->MlmeIndication )
     {
         case MLME_SCHEDULE_UPLINK:
@@ -442,23 +485,20 @@ static MibRequestConfirm_t mibReq;
 void LoRaWanAppStart()
 {
     LoraWanDrv.State = DEVICE_STATE_INIT;
-		LoraWanDrv.Type = DEVICE_SEND_PING;
-	
-		if (ReadSettings(&DevSetting) != true)
-		{
-			SYSLOG_W("Used default setting");
-		}
+    LoraWanDrv.SendType = DEVICE_SEND_NOT;
+    LoraWanDrv.TryPing = 0;
+    LoraWanDrv.TrySend = 0;
+        
+    if (ReadSettings(&DevSetting) != true)
+    {
+        SYSLOG_W("Used default setting");
+    }
 
     SYSLOG_I("ClassA app start\r\n");	
 }
 
 extern void LoRaWanAppLoop()
-{
-	  if (Radio.IrqProcess != NULL) 
-		{
-			Radio.IrqProcess();
-    }
-					
+{				
 		switch( LoraWanDrv.State )
 		{
 				case DEVICE_STATE_INIT:
@@ -511,11 +551,11 @@ extern void LoRaWanAppLoop()
 
 							if( LoRaMacMlmeRequest( &mlmeReq ) == LORAMAC_STATUS_OK )
 							{
-									LoraWanDrv.State = DEVICE_STATE_IDLE;
+                                LoraWanDrv.State = DEVICE_STATE_IDLE;
 							}
 							else
 							{
-									LoraWanDrv.State = DEVICE_STATE_CYCLE;
+                                LoraWanDrv.State = DEVICE_STATE_CYCLE;
 							}
 						}
 						else
@@ -546,13 +586,14 @@ extern void LoRaWanAppLoop()
 				}
 				case DEVICE_STATE_SEND:
 				{
-						if( LoraWanDrv.NextTx == true )
+						if (LoraWanDrv.SendType != DEVICE_SEND_NOT)
 						{
-								PrepareTxFrame( LoraWanDrv.Type );
-
-								LoraWanDrv.NextTx = SendFrame( );
+                            PrepareTxFrame( LoraWanDrv.SendType );
+                            if (SendFrame( ) != true)
+                            {
+                                LoraWanDrv.SendType = DEVICE_SEND_NOT;
+                            }
 						}
-						
 						// Schedule next packet transmission
 						LoraWanDrv.PingTimeout = DevSetting.PingDefs.Period + randr( 0, (DevSetting.PingDefs.Period / 10) );
 						LoraWanDrv.State = DEVICE_STATE_CYCLE;
@@ -569,10 +610,11 @@ extern void LoRaWanAppLoop()
 				}
 				case DEVICE_STATE_IDLE:
 				{
-						if ((LoraWanDrv.NextTx == true) && (SendBufferGetCount() != 0))
+						if ((LoraWanDrv.SendType == DEVICE_SEND_NOT) && (SendBufferGetCount() != 0))
 						{
 							OnTxCardInfoPacketEvent();
 						}
+                        Radio.IrqProcess();
 						break;
 				}
 				default:

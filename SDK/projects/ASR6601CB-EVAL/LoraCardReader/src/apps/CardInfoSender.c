@@ -3,8 +3,8 @@
 typedef struct
 {
     sCardInfo Buff[CARD_INFO_BUFFER_SIZE];
-    uint16_t idxIn;
-    uint16_t idxOut;
+    volatile uint16_t idxIn;
+    volatile uint16_t idxOut;
 } sSendBuffer;
 
 static sSendBuffer SendBuffer = 
@@ -16,22 +16,21 @@ static sSendBuffer SendBuffer =
 void SendBufferPut(sCardInfo Info)
 {
     SendBuffer.Buff[SendBuffer.idxIn++] = Info;
-    if (SendBuffer.idxIn >= CARD_INFO_BUFFER_SIZE) SendBuffer.idxIn = 0;
-		SYSLOG_I("Put packet. Packet count = %d", SendBufferGetCount());
+    if (SendBuffer.idxIn >= CARD_INFO_BUFFER_SIZE)
+    {
+        SendBuffer.idxIn = 0;
+    }
+	SYSLOG_I("Put packet. Packet count = %d", SendBufferGetCount());
 }
 
-sCardInfo SendBufferPop(bool isNotInc)
+sCardInfo SendBufferPop()
 {
     sCardInfo retval = SendBuffer.Buff[SendBuffer.idxOut];
-		if (isNotInc == false)
-		{
-			SendBufferInc();
-		}
-		SYSLOG_I("Pop packet. Packet count = %d", SendBufferGetCount());
+	SYSLOG_I("Pop packet. Packet count = %d", SendBufferGetCount());
     return retval;
 }
 
-void SendBufferInc( )
+void SendBufferDelete( )
 {
 	if (SendBufferGetCount() != 0)
 	{
@@ -40,7 +39,7 @@ void SendBufferInc( )
 		{
 			SendBuffer.idxOut = 0;
 		}
-		SYSLOG_I("Inc buffer. Packet count = %d", SendBufferGetCount());
+		SYSLOG_I("Delete record. Packet count = %d", SendBufferGetCount());
 	}
 }
 

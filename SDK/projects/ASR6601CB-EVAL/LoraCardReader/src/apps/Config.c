@@ -6,19 +6,19 @@
 
 static sDevSetting DefaultSetting = 
 {
-		.JoinMode = JOIN_MODE_OTAA,
-		.AdrMode = ADR_MODE_ON,
-		.OTAKeys.deveui = LORAWAN_DEVICE_EUI,
-		.OTAKeys.appeui = LORAWAN_APPLICATION_EUI,
-		.OTAKeys.appkey = LORAWAN_APPLICATION_KEY,
+    .JoinMode = JOIN_MODE_OTAA,
+    .AdrMode = ADR_MODE_OFF,
+    .OTAKeys.deveui = LORAWAN_DEVICE_EUI,
+    .OTAKeys.appeui = LORAWAN_APPLICATION_EUI,
+    .OTAKeys.appkey = LORAWAN_APPLICATION_KEY,
     .ABPKeys.devaddr = LORAWAN_DEVICE_ADDRESS,
     .ABPKeys.nwkskey = LORAWAN_NWKSKEY,
     .ABPKeys.appskey = LORAWAN_APPSKEY,	
-		.PingDefs.Period = 60000,
-		.PingDefs.NbTrials = 0,
-		.PingDefs.Port = 2,
-		.SendDefs.NbTrials = 0,
-		.SendDefs.Port = 3,
+    .PingDefs.Period = 60000,
+    .PingDefs.NbTrials = 25,
+    .PingDefs.Port = 2,
+    .SendDefs.NbTrials = 3,
+    .SendDefs.Port = 3,
 };
 
 static uint16_t crc16(uint8_t *buffer, uint8_t length )

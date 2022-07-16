@@ -38,32 +38,32 @@ typedef struct sABPKeys_t
 
 typedef struct sPingDefs_t
 {
-		uint32_t Period;
-		uint8_t NbTrials;
-		uint8_t Port;
+	uint32_t Period;
+	uint8_t NbTrials;
+	uint8_t Port;
 } sPingDefs;
 
 typedef struct sSendDefs_t
 {
-		uint8_t NbTrials;
-		uint8_t Port;
+	uint8_t NbTrials;
+	uint8_t Port;
 } sSendDefs;
 
 
 typedef struct sDevSetting_t 
 {
-		eJoinMode JoinMode;
-		eAdrMode AdrMode;
-		sOTAKeys OTAKeys;
+	eJoinMode JoinMode;
+	eAdrMode AdrMode;
+	sOTAKeys OTAKeys;
     sABPKeys ABPKeys;
-		sPingDefs PingDefs;
-		sSendDefs SendDefs;
+	sPingDefs PingDefs;
+	sSendDefs SendDefs;
 } __attribute__((packed))sDevSetting;
 
 typedef struct sDevSettingFile_t 
 {
     uint32_t magic;
-		sDevSetting DevSetting ;
+	sDevSetting DevSetting ;
     uint16_t checksum;
 } __attribute__((packed))sDevSettingFile;
 
@@ -93,8 +93,8 @@ typedef struct
 } sCardReaderInfo;
 
 extern void SendBufferPut(sCardInfo Info);
-extern sCardInfo SendBufferPop(bool isNotInc);
-extern void SendBufferInc( );
+extern sCardInfo SendBufferPop( );
+extern void SendBufferDelete( );
 extern uint16_t SendBufferGetCount( );
 extern void SendBufferClear( );
 extern uint8_t PrepareCardInfoFrame(sCardInfo Info, uint8_t *buff);
