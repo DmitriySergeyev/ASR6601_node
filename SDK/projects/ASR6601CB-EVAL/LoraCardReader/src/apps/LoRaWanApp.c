@@ -310,7 +310,9 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
 	
     if ((DevSetting.PingDefs.NbTrials != 0) && (LoraWanDrv.TryPing >= DevSetting.PingDefs.NbTrials))
     {
-        CardReaderAppStart();
+        SYSLOG_W("Not connect. Rejoin");
+        LoRaWanAppStart();
+        return;
     }       
     SYSLOG_D("Send type=%d, TrySend=%d, TryPing=%d", LoraWanDrv.SendType, LoraWanDrv.TrySend, LoraWanDrv.TryPing);
     LoraWanDrv.SendType = DEVICE_SEND_NOT;
