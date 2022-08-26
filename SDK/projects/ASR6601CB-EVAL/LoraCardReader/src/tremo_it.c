@@ -1,4 +1,5 @@
 #include "tremo_it.h"
+#include "tremo_uart.h"
 
 extern void RadioOnDioIrq(void);
 extern void RtcOnIrq(void);
@@ -112,4 +113,11 @@ void LORA_IRQHandler()
 void RTC_IRQHandler(void)
 {
     RtcOnIrq();
+}
+
+volatile uint32_t it = 0;
+void UART0_IRQHandler(void)
+{
+    uart_clear_interrupt(CONFIG_DEBUG_UART, UART_INTERRUPT_RX_DONE);
+    it++;
 }

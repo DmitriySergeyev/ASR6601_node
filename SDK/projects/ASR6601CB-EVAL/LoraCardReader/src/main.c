@@ -4,6 +4,7 @@
 #include "apps.h"
 #include "rtc-board.h"
 #include "tremo_pwr.h"
+#include "tremo_wdg.h"
 
 static void board_init()
 {
@@ -18,13 +19,15 @@ static void board_init()
     rcc_enable_peripheral_clk(RCC_PERIPHERAL_RTC, true);
     rcc_enable_peripheral_clk(RCC_PERIPHERAL_SAC, true);
     rcc_enable_peripheral_clk(RCC_PERIPHERAL_LORA, true);
-		rcc_enable_peripheral_clk(RCC_PERIPHERAL_I2C0, true);
-		rcc_enable_peripheral_clk(RCC_PERIPHERAL_SYSCFG, true);
+	rcc_enable_peripheral_clk(RCC_PERIPHERAL_I2C0, true);
+	rcc_enable_peripheral_clk(RCC_PERIPHERAL_SYSCFG, true);
+    rcc_enable_peripheral_clk(RCC_PERIPHERAL_WDG, true);
+    wdg_stop();
 
     delay_ms(100);
     pwr_xo32k_lpm_cmd(false); // Запрещаем переходить в Sleep
-		debug_init();
-		SYSLOG_I("LoraWan card reader started");
+	debug_init();
+	SYSLOG_I("LoraWan card reader started");
 
     RtcInit();
 }
