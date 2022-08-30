@@ -12,11 +12,14 @@ void debug_init(void)
     
     uart_config_init(&uart_config);
 
-    uart_config.baudrate = UART_BAUDRATE_115200;
+    uart_config.fifo_mode = ENABLE;
+    uart_config.baudrate  = UART_BAUDRATE_115200;
     uart_init(CONFIG_DEBUG_UART, &uart_config);
-    uart_config_interrupt(CONFIG_DEBUG_UART, UART_INTERRUPT_RX_DONE,ENABLE);
-    NVIC_SetPriority(UART0_IRQn, 2);
-    NVIC_EnableIRQ(UART0_IRQn);
     uart_cmd(CONFIG_DEBUG_UART, ENABLE);
     
+    uart_config_interrupt(CONFIG_DEBUG_UART, UART_INTERRUPT_RX_DONE, ENABLE);
+    uart_config_interrupt(CONFIG_DEBUG_UART, UART_INTERRUPT_RX_TIMEOUT, ENABLE);
+
+    /* NVIC config */
+    NVIC_EnableIRQ(UART0_IRQn);
 }

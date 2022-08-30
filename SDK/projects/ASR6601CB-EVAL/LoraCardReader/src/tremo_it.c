@@ -118,6 +118,17 @@ void RTC_IRQHandler(void)
 volatile uint32_t it = 0;
 void UART0_IRQHandler(void)
 {
-    uart_clear_interrupt(CONFIG_DEBUG_UART, UART_INTERRUPT_RX_DONE);
-    it++;
+    if(uart_get_interrupt_status(UART0, UART_INTERRUPT_RX_DONE)){
+        uart_clear_interrupt(UART0, UART_INTERRUPT_RX_DONE);
+    }
+	
+    if(uart_get_interrupt_status(UART0, UART_INTERRUPT_RX_TIMEOUT)){
+        uart_clear_interrupt(UART0, UART_INTERRUPT_RX_TIMEOUT);
+    }
+	
+    while(!uart_get_flag_status(UART0, UART_FLAG_RX_FIFO_EMPTY)){
+        uint32_t rx_data_temp = uart_receive_data(UART0);
+        //serial_input(rx_data_temp);
+			it++;
+    }
 }
