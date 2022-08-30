@@ -145,7 +145,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U4294967295 -O1102 -S8 -ZTIFSpeedSel50000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST1 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO19 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC4000 -FN1 -FF0ASR6601 -FS08000000 -FL020000</Name>
+          <Name>-U4294967295 -O1102 -S8 -ZTIFSpeedSel50000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST2 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO19 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC4000 -FN1 -FF0ASR6601 -FS08000000 -FL020000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -166,7 +166,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\ASR6601-getting-started-guide-main\SDK\projects\ASR6601CB-EVAL\LoraCardReader\src\tremo_it.c</Filename>
+          <Filename>D:\Home\Prog\SDK\projects\ASR6601CB-EVAL\LoraCardReader\src\tremo_it.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\LoraCardReader\src/tremo_it.c\120</Expression>
         </Bp>
@@ -182,9 +182,25 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\ASR6601-getting-started-guide-main\SDK\projects\ASR6601CB-EVAL\LoraCardReader\src\tremo_it.c</Filename>
+          <Filename>D:\Home\Prog\SDK\projects\ASR6601CB-EVAL\LoraCardReader\src\tremo_it.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\LoraCardReader\src/tremo_it.c\122</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>134</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>D:\Home\Prog\SDK\projects\ASR6601CB-EVAL\LoraCardReader\src\tremo_it.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
