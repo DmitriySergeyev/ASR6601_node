@@ -15,5 +15,7 @@ extern bool hwCR_Read(uint8_t *data);
 extern bool hwCR_ReadAvailable();
 extern void hwCR_ReadStop();
 extern void hwCR_Reset();
+extern void hwCR_Beep();
+
 
 #endif

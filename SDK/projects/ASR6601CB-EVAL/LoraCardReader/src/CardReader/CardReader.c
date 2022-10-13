@@ -1728,11 +1728,18 @@ bool MIFARE_UnbrickUidSector(bool logErrors) {
  * @return bool
  */
 bool PICC_IsNewCardPresent() {
+	bool ret;
 	uint8_t bufferATQA[2];
 	uint8_t bufferSize = sizeof(bufferATQA);
 	uint8_t result = PICC_RequestA(bufferATQA, &bufferSize);
-	return (result == STATUS_OK || result == STATUS_COLLISION);
+	ret  = ((result == STATUS_OK || result == STATUS_COLLISION));
+	if (ret)
+	{
+		hwCR_Beep();
+	}
+	return ret;
 } // End PICC_IsNewCardPresent()
+
 
 /**
  * Simple wrapper around PICC_Select.

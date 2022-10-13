@@ -6,7 +6,7 @@
 
 static sDevSetting DefaultSetting = 
 {
-    .JoinMode = JOIN_MODE_OTAA,
+    .JoinMode = JOIN_MODE_ABP,
     .AdrMode = ADR_MODE_OFF,
     .OTAKeys.deveui = LORAWAN_DEVICE_EUI,
     .OTAKeys.appeui = LORAWAN_APPLICATION_EUI,

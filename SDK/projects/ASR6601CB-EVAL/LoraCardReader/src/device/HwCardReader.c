@@ -6,6 +6,9 @@ static size_t TotalRead = 0;
 static size_t IndxRead = 0;
 static uint8_t DevAddr = 0;
 
+#define RESET_PIN GPIO_PIN_2
+#define BEEP_PIN	GPIO_PIN_3
+
 static bool WaitFlag(i2c_flag_t flag, uint32_t timeout)
 {
 		uint32_t cycle = 0;
@@ -30,7 +33,8 @@ static bool WaitFlag(i2c_flag_t flag, uint32_t timeout)
 void hwCR_Init(void)
 {
     // set iomux
-		gpio_init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUTPUT_PP_HIGH);
+		gpio_init(GPIOA, RESET_PIN, GPIO_MODE_OUTPUT_PP_HIGH); 
+		gpio_init(GPIOA, BEEP_PIN, GPIO_MODE_OUTPUT_PP_LOW);
     gpio_set_iomux(GPIOA, GPIO_PIN_14, 3);
     gpio_set_iomux(GPIOA, GPIO_PIN_15, 3);
 
@@ -121,11 +125,17 @@ void hwCR_ReadStop()
 
 void hwCR_Reset()
 { 
-		gpio_write(GPIOA, GPIO_PIN_2, GPIO_LEVEL_LOW); 
+		gpio_write(GPIOA, RESET_PIN, GPIO_LEVEL_LOW); 
 		delay_ms(50);
-		gpio_write(GPIOA, GPIO_PIN_2, GPIO_LEVEL_HIGH);
+		gpio_write(GPIOA, RESET_PIN, GPIO_LEVEL_HIGH);
 		delay_ms(50);
 }
 
+void hwCR_Beep()
+{ 
+		gpio_write(GPIOA, BEEP_PIN, GPIO_LEVEL_HIGH); 
+		delay_ms(200);
+		gpio_write(GPIOA, BEEP_PIN, GPIO_LEVEL_LOW);
+}
 
 

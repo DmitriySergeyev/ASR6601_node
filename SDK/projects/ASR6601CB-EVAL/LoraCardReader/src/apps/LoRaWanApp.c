@@ -27,7 +27,7 @@
 typedef enum eDeviceSendType_t
 {
     DEVICE_SEND_NOT,
-    DEVICE_SEND_PING,
+    //DEVICE_SEND_PING,
     DEVICE_SEND_CARD,	
 } eDeviceSendType;
 
@@ -94,7 +94,7 @@ static void PrepareTxFrame( eDeviceSendType Type )
 	
 		switch (Type)
 		{
-			case DEVICE_SEND_PING:
+			/*case DEVICE_SEND_PING:
 				SYSLOG_I("Send ping packet");
 				TxInfo.Port = DevSetting.PingDefs.Port;
 				if (DevSetting.PingDefs.NbTrials == 0)
@@ -106,7 +106,7 @@ static void PrepareTxFrame( eDeviceSendType Type )
 					TxInfo.IsConfirmed = true;		
 				}
 				TxInfo.Size = PreparePingFrame(TxInfo.Buff);
-				break;
+				break;*/
 			case DEVICE_SEND_CARD:
 				SYSLOG_I("Send card info packet");
 				TxInfo.Port = DevSetting.SendDefs.Port;
@@ -186,8 +186,8 @@ static void OnTxPingPacketTimerEvent( void )
     {
         if( mibReq.Param.IsNetworkJoined == true )
         {
-			LoraWanDrv.SendType = DEVICE_SEND_PING;
-            LoraWanDrv.State = DEVICE_STATE_SEND;
+						//LoraWanDrv.SendType = DEVICE_SEND_PING;
+            //LoraWanDrv.State = DEVICE_STATE_SEND;
         }
         else
         {
@@ -265,9 +265,9 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
                         LoraWanDrv.TrySend = 0;
                         LoraWanDrv.TryPing = 0;
                         break;
-                    case DEVICE_SEND_PING:
+                    /*case DEVICE_SEND_PING:
                         LoraWanDrv.TryPing = 0;
-                        break;
+                        break;*/
                     default:
                         break;
 				}
@@ -300,9 +300,9 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
                     SendBufferDelete();
                 }
                 break;
-            case DEVICE_SEND_PING:
+            /*case DEVICE_SEND_PING:
                 LoraWanDrv.TryPing++;
-                break;
+                break;*/
             default:
                 break;
 		}
@@ -394,8 +394,8 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
             {
                 SYSLOG_I("joined\r\n");
                 // Status is OK, node has joined the network
-                LoraWanDrv.State = DEVICE_STATE_SEND;
-                LoraWanDrv.SendType = DEVICE_SEND_PING;
+                /*LoraWanDrv.State = DEVICE_STATE_SEND;
+                LoraWanDrv.SendType = DEVICE_SEND_PING;*/
                 return;
             }
             else

@@ -11,7 +11,7 @@ static bool ShowReaderDetails()
 {
 	// Get the MFRC522 software version
 	ver = PCD_ReadRegister(VersionReg);
-	SYSLOG_D("MFRC522 Software Version: 0x0%2X", ver);
+	SYSLOG_D("MFRC522 Software Version: 0x%2X", ver);
 	if (ver == 0x91)
 	{
 		SYSLOG_I("MFRC522 = v1.0");
@@ -20,6 +20,10 @@ static bool ShowReaderDetails()
 	{
 		SYSLOG_I("MFRC522 = v2.0");
 	}
+	else if (ver == 0xB2)
+	{
+		SYSLOG_I("Chinese clone");
+	}	
 	else
 	{
 		SYSLOG_I("MFRC522 version unknown");
