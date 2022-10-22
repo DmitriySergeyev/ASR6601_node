@@ -17,7 +17,7 @@ static sDevSetting DefaultSetting =
     .PingDefs.Period = 10000,
     .PingDefs.NbTrials = 0,
     .PingDefs.Port = 2,
-    .SendDefs.NbTrials = 3,
+    .SendDefs.NbTrials = 0,
     .SendDefs.Port = 3,
 };
 

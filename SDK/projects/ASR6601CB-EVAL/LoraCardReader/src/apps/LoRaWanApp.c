@@ -110,9 +110,19 @@ static void PrepareTxFrame( eDeviceSendType Type )
 			case DEVICE_SEND_CARD:
 				SYSLOG_I("Send card info packet");
 				TxInfo.Port = DevSetting.SendDefs.Port;
-				TxInfo.IsConfirmed = true;		
 				CardInfo = SendBufferPop();
 				TxInfo.Size = PrepareCardInfoFrame(CardInfo, TxInfo.Buff);
+				if (DevSetting.SendDefs.NbTrials == 0)
+				{
+					TxInfo.IsConfirmed = false;
+					SendBufferDelete( );
+				}
+				else
+				{
+					TxInfo.IsConfirmed = true;
+				}
+						
+
 				break;	
 			default:
 				TxInfo.Size = 0;
