@@ -1733,10 +1733,12 @@ bool PICC_IsNewCardPresent() {
 	uint8_t bufferSize = sizeof(bufferATQA);
 	uint8_t result = PICC_RequestA(bufferATQA, &bufferSize);
 	ret  = ((result == STATUS_OK || result == STATUS_COLLISION));
+#if 0	
 	if (ret)
 	{
 		hwCR_Beep();
 	}
+#endif	
 	return ret;
 } // End PICC_IsNewCardPresent()
 

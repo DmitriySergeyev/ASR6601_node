@@ -121,8 +121,6 @@ static void PrepareTxFrame( eDeviceSendType Type )
 				{
 					TxInfo.IsConfirmed = true;
 				}
-						
-
 				break;	
 			default:
 				TxInfo.Size = 0;

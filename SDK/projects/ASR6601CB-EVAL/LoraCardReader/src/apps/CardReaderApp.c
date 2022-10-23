@@ -73,6 +73,7 @@ void CardReaderAppLoop()
 			CardInfo.ReadResult = eCardReadOk;
 			CardInfo.CardUid = uid;
 			PICC_DumpToSerial2(&uid);	 // Dump debug info about the card; PICC_HaltA() is automatically called
+			hwCR_Beep();
 		}
 		SendBufferPut(CardInfo);
 	}
